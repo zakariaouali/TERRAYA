@@ -3,6 +3,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { getSession } from "@/lib/auth";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
+import { sniffImageType } from "@/lib/image-sniff";
 import { ok, fail } from "@/lib/api";
 
 const MAX_BYTES = 8 * 1024 * 1024; // 8MB
@@ -25,16 +26,20 @@ export async function POST(req: NextRequest) {
 
   const file = form.get("file");
   if (!(file instanceof File)) return fail("No file provided.");
-  if (!file.type.startsWith("image/")) return fail("Only image files are allowed.");
   if (file.size > MAX_BYTES) return fail("Image must be 8MB or smaller.");
 
-  const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
-  const name = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  const buf = Buffer.from(await file.arrayBuffer());
+  const detected = sniffImageType(buf);
+  if (!detected) {
+    return fail("File is not a supported image (JPEG, PNG, WebP, or AVIF).");
+  }
+
+  const name = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${detected}`;
   const dir = path.join(process.cwd(), "public", "uploads");
 
   try {
     await fs.mkdir(dir, { recursive: true });
-    await fs.writeFile(path.join(dir, name), Buffer.from(await file.arrayBuffer()));
+    await fs.writeFile(path.join(dir, name), buf);
   } catch (err) {
     console.error("[upload]", err);
     return fail("Could not save the file.", 500);
