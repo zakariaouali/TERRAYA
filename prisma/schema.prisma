@@ -1,0 +1,88 @@
+// SQLite for zero-setup local/demo use. The schema avoids native enums and
+// array columns (stored as JSON strings) so it is portable to PostgreSQL —
+// to switch, change the provider to "postgresql" and update DATABASE_URL.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  passwordHash String
+  name         String?
+  role         String     @default("VIEWER") // ADMIN | EDITOR | VIEWER
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  auditLogs    AuditLog[]
+}
+
+model Property {
+  id           String    @id @default(cuid())
+  slug         String    @unique
+  title        String
+  tagline      String?
+  description  String
+  type         String // VILLA | ESTATE | PENTHOUSE | RESIDENCE | RIAD | LAND
+  listingType  String    @default("SALE") // SALE | RENT | HOLIDAY_RENT
+  rentalPeriod String? // DAY | WEEK (holiday rentals)
+  status       String    @default("AVAILABLE") // DRAFT | AVAILABLE | RESERVED | SOLD
+  location     String
+  city         String
+  country      String
+  priceEur     BigInt
+  bedrooms     Int
+  bathrooms    Int
+  areaSqm      Int
+  landSqm      Int?
+  yieldPercent Float?
+  featured     Boolean   @default(false)
+  heroImage    String
+  images       String    @default("[]") // JSON-encoded string[]
+  amenities    String    @default("[]") // JSON-encoded string[]
+  highlights   String    @default("[]") // JSON-encoded string[]
+  latitude     Float?
+  longitude    Float?
+  brochureUrl  String?
+  videoUrl     String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  inquiries    Inquiry[]
+
+  @@index([status, featured])
+  @@index([city])
+}
+
+model Inquiry {
+  id         String    @id @default(cuid())
+  propertyId String?
+  property   Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+  name       String
+  email      String
+  phone      String?
+  message    String
+  budget     String?
+  status     String    @default("NEW") // NEW | CONTACTED | QUALIFIED | CLOSED
+  createdAt  DateTime  @default(now())
+
+  @@index([status, createdAt])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  entity    String
+  entityId  String?
+  metadata  String? // JSON-encoded object
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([entity, createdAt])
+}

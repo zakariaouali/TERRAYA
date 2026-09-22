@@ -1,0 +1,140 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { Container } from "@/components/shared/Container";
+import { FadeIn } from "@/components/shared/FadeIn";
+import { useLang } from "@/lib/i18n";
+import { cn } from "@/lib/utils";
+
+/**
+ * Three core ways to engage with the collection: Buy, Rent (long stays) and
+ * Vacation (by the night). Swap `image` / `href` to re-point a card — labels
+ * are resolved from the i18n dictionary.
+ */
+type Category = {
+  href: string;
+  image: string;
+  alt: string;
+  labelKey: string;
+  subKey: string;
+};
+
+const featured: Category = {
+  href: "/properties?listingType=SALE",
+  image:
+    "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80",
+  alt: "A luxury estate available to buy",
+  labelKey: "cat.buy",
+  subKey: "cat.buy.sub",
+};
+
+const stacked: Category[] = [
+  {
+    href: "/properties?listingType=RENT",
+    image:
+      "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1600&q=80",
+    alt: "An elegant residence available for long-term rent",
+    labelKey: "cat.rent",
+    subKey: "cat.rent.sub",
+  },
+  {
+    href: "/properties?listingType=HOLIDAY_RENT",
+    image:
+      "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=1600&q=80",
+    alt: "A coastal villa available for nightly holiday stays",
+    labelKey: "cat.vacation",
+    subKey: "cat.vacation.sub",
+  },
+];
+
+type Size = "lg" | "md";
+
+function CategoryCard({
+  category,
+  size = "md",
+  priority = false,
+}: {
+  category: Category;
+  size?: Size;
+  priority?: boolean;
+}) {
+  const { t } = useLang();
+  const isLarge = size === "lg";
+
+  return (
+    <Link
+      href={category.href}
+      aria-label={t(category.labelKey)}
+      className={cn(
+        "group relative block overflow-hidden border border-sand-200/60 shadow-sm transition-shadow duration-500 hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-sand-100 dark:border-sand-800 dark:focus-visible:ring-offset-sand-900",
+        isLarge ? "min-h-[360px] lg:col-span-7 lg:row-span-2 lg:min-h-0" : "min-h-[220px] lg:col-span-5"
+      )}
+    >
+      <Image
+        src={category.image}
+        alt={category.alt}
+        fill
+        priority={priority}
+        quality={85}
+        sizes={isLarge ? "(min-width:1024px) 58vw, 100vw" : "(min-width:1024px) 42vw, 100vw"}
+        className="object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-black/10" />
+      <div className="absolute inset-0 bg-black/0 transition-colors duration-500 group-hover:bg-black/20" />
+      <div className="pointer-events-none absolute inset-3 border border-white/20" />
+
+      <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+        <span className="mb-3 max-w-xs text-[0.6rem] uppercase tracking-[0.3em] text-white/75">
+          {t(category.subKey)}
+        </span>
+        <h3
+          className={cn(
+            "font-display text-white drop-shadow-sm transition-transform duration-500 group-hover:-translate-y-1",
+            isLarge ? "text-4xl lg:text-6xl" : "text-2xl lg:text-3xl"
+          )}
+        >
+          {t(category.labelKey)}
+        </h3>
+        <span className="mt-4 inline-flex items-center gap-2 text-[0.62rem] uppercase tracking-[0.28em] text-white/0 transition-all duration-500 group-hover:text-white/90">
+          {t("cat.cta")}
+          <ArrowUpRight size={14} className="transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </span>
+      </div>
+    </Link>
+  );
+}
+
+export function PropertyCategories() {
+  const { t } = useLang();
+
+  return (
+    <section className="py-24 lg:py-32">
+      <Container>
+        <FadeIn>
+          <div className="mb-12 max-w-2xl lg:mb-16">
+            <p className="eyebrow mb-4">
+              <span className="luxury-divider">{t("cat.eyebrow")}</span>
+            </p>
+            <h2 className="font-display text-4xl leading-[1.05] text-sand-900 dark:text-sand-100 md:text-5xl lg:text-6xl">
+              {t("cat.title")}
+            </h2>
+            <p className="mt-6 text-lg leading-relaxed text-sand-700 dark:text-sand-300">
+              {t("cat.lead")}
+            </p>
+          </div>
+        </FadeIn>
+
+        <FadeIn delay={0.1}>
+          <div className="grid gap-4 sm:gap-5 lg:auto-rows-fr lg:grid-cols-12">
+            <CategoryCard category={featured} size="lg" priority />
+            {stacked.map((c) => (
+              <CategoryCard key={c.labelKey} category={c} size="md" />
+            ))}
+          </div>
+        </FadeIn>
+      </Container>
+    </section>
+  );
+}
