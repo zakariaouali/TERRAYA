@@ -1,5 +1,10 @@
 // MySQL. The schema avoids native enums and array columns (stored as JSON
 // strings) so it stays portable across MySQL/MariaDB/Postgres.
+//
+// Explicit @db.VarChar/@db.Text lengths matter here: MySQL/MariaDB truncate
+// a plain `String` column (Prisma's default VARCHAR(191)) silently under
+// non-strict SQL mode instead of erroring, so every field is sized to at
+// least its Zod validation max in src/lib/validation.ts.
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,7 +16,7 @@ datasource db {
 
 model User {
   id           String     @id @default(cuid())
-  email        String     @unique
+  email        String     @unique @db.VarChar(255)
   passwordHash String
   name         String?
   role         String     @default("VIEWER") // ADMIN | EDITOR | VIEWER
@@ -23,14 +28,13 @@ model User {
 model Property {
   id           String    @id @default(cuid())
   slug         String    @unique
-  title        String
-  tagline      String?
-  description  String
+  title        String    @db.VarChar(255)
+  tagline      String?   @db.VarChar(255)
+  description  String    @db.Text
   type         String // VILLA | ESTATE | PENTHOUSE | RESIDENCE | RIAD | LAND
-  listingType  String    @default("SALE") // SALE | RENT | HOLIDAY_RENT
-  rentalPeriod String? // DAY | WEEK (holiday rentals)
+  listingType  String    @default("SALE") // SALE | RENT — long-term only, 6-month minimum on RENT
   status       String    @default("AVAILABLE") // DRAFT | AVAILABLE | RESERVED | SOLD
-  location     String
+  location     String    @db.VarChar(255)
   city         String
   country      String
   priceEur     BigInt
@@ -40,14 +44,14 @@ model Property {
   landSqm      Int?
   yieldPercent Float?
   featured     Boolean   @default(false)
-  heroImage    String
-  images       String    @default("[]") // JSON-encoded string[]
-  amenities    String    @default("[]") // JSON-encoded string[]
-  highlights   String    @default("[]") // JSON-encoded string[]
+  heroImage    String    @db.VarChar(600)
+  images       String    @db.Text // JSON-encoded string[]
+  amenities    String    @db.Text // JSON-encoded string[]
+  highlights   String    @db.Text // JSON-encoded string[]
   latitude     Float?
   longitude    Float?
-  brochureUrl  String?
-  videoUrl     String?
+  brochureUrl  String?   @db.VarChar(600)
+  videoUrl     String?   @db.VarChar(600)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   inquiries    Inquiry[]
@@ -61,9 +65,9 @@ model Inquiry {
   propertyId String?
   property   Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
   name       String
-  email      String
+  email      String    @db.VarChar(255)
   phone      String?
-  message    String
+  message    String    @db.Text
   budget     String?
   status     String    @default("NEW") // NEW | CONTACTED | QUALIFIED | CLOSED
   createdAt  DateTime  @default(now())
@@ -78,9 +82,9 @@ model AuditLog {
   action    String
   entity    String
   entityId  String?
-  metadata  String? // JSON-encoded object
+  metadata  String?  @db.Text // JSON-encoded object
   ip        String?
-  userAgent String?
+  userAgent String?  @db.Text
   createdAt DateTime @default(now())
 
   @@index([entity, createdAt])
@@ -88,7 +92,7 @@ model AuditLog {
 
 model NewsletterSignup {
   id        String   @id @default(cuid())
-  email     String
+  email     String   @db.VarChar(255)
   ip        String?
   createdAt DateTime @default(now())
 
@@ -98,11 +102,11 @@ model NewsletterSignup {
 model ConsultationRequest {
   id        String   @id @default(cuid())
   name      String
-  email     String
+  email     String   @db.VarChar(255)
   phone     String?
   date      String?
   time      String?
-  message   String?
+  message   String?  @db.Text
   ip        String?
   createdAt DateTime @default(now())
 

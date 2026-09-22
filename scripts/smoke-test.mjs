@@ -30,6 +30,22 @@ async function main() {
     check(`route ${route} returns 200`, r.status === 200);
   }
 
+  // 1b. Long text fields (description, images JSON) must not be silently
+  // truncated by the database — MySQL/MariaDB defaults a plain Prisma
+  // `String` column to VARCHAR(191) and truncates on overflow without
+  // erroring under non-strict SQL mode. Regression check for that exact bug.
+  const listApi = await (await fetch(BASE + "/api/properties")).json();
+  const sample = listApi.data[0];
+  check("sample property description exceeds 191 chars", sample.description.length > 191);
+  check("sample property description does not end mid-word/truncated", !/[a-zA-Z]$/.test(sample.description.trim()) || /[.!?]$/.test(sample.description.trim()));
+  let imagesArrayIntact = false;
+  try {
+    imagesArrayIntact = Array.isArray(JSON.parse(sample.images)) && JSON.parse(sample.images).length > 0;
+  } catch {
+    imagesArrayIntact = false;
+  }
+  check("sample property images JSON parses intact (not truncated)", imagesArrayIntact);
+
   // 2. Login works.
   const login = await fetch(BASE + "/api/auth/login", {
     method: "POST",

@@ -23,7 +23,6 @@ async function main() {
       description: p.description,
       type: p.type,
       listingType: p.listingType,
-      rentalPeriod: p.rentalPeriod ?? null,
       status: "AVAILABLE",
       location: p.location,
       city: p.city,
