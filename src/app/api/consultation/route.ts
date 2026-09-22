@@ -1,7 +1,8 @@
 import { NextRequest } from "next/server";
+import { prisma } from "@/lib/prisma";
 import { consultationSchema } from "@/lib/validation";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
-import { appendLead } from "@/lib/leads";
+import { appendLead, hasDatabase } from "@/lib/leads";
 import { ok, fail } from "@/lib/api";
 
 export async function POST(req: NextRequest) {
@@ -20,14 +21,30 @@ export async function POST(req: NextRequest) {
   if (!parsed.success) return fail("Please review the form and try again.");
 
   const d = parsed.data;
-  await appendLead("consultation", {
-    name: d.name,
-    email: d.email.toLowerCase(),
-    phone: d.phone,
-    date: d.date,
-    time: d.time,
-    message: d.message,
-    ip,
+
+  if (!hasDatabase()) {
+    await appendLead("consultation", {
+      name: d.name,
+      email: d.email.toLowerCase(),
+      phone: d.phone,
+      date: d.date,
+      time: d.time,
+      message: d.message,
+      ip,
+    });
+    return ok({ booked: true }, { status: 201 });
+  }
+
+  await prisma.consultationRequest.create({
+    data: {
+      name: d.name,
+      email: d.email.toLowerCase(),
+      phone: d.phone,
+      date: d.date,
+      time: d.time,
+      message: d.message,
+      ip,
+    },
   });
 
   return ok({ booked: true }, { status: 201 });

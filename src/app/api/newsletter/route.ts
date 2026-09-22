@@ -1,7 +1,8 @@
 import { NextRequest } from "next/server";
+import { prisma } from "@/lib/prisma";
 import { newsletterSchema } from "@/lib/validation";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
-import { appendLead } from "@/lib/leads";
+import { appendLead, hasDatabase } from "@/lib/leads";
 import { ok, fail } from "@/lib/api";
 
 export async function POST(req: NextRequest) {
@@ -19,7 +20,14 @@ export async function POST(req: NextRequest) {
   const parsed = newsletterSchema.safeParse(body);
   if (!parsed.success) return fail("Please enter a valid email address.");
 
-  await appendLead("newsletter", { email: parsed.data.email.toLowerCase(), ip });
+  const email = parsed.data.email.toLowerCase();
+
+  if (!hasDatabase()) {
+    await appendLead("newsletter", { email, ip });
+    return ok({ subscribed: true }, { status: 201 });
+  }
+
+  await prisma.newsletterSignup.create({ data: { email, ip } });
 
   return ok({ subscribed: true }, { status: 201 });
 }
