@@ -14,3 +14,20 @@ export function whatsappHref(message?: string) {
   const base = `https://wa.me/${CONTACT.whatsapp}`;
   return message ? `${base}?text=${encodeURIComponent(message)}` : base;
 }
+
+// Page-aware opening line for the floating WhatsApp button, so a message
+// sent from any page names what the visitor was looking at — even without
+// the more specific per-listing context a property page provides on its own.
+const ROUTE_MESSAGES: { prefix: string; message: string }[] = [
+  { prefix: "/properties", message: "Hello TERRAYA, I have a question about your properties." },
+  { prefix: "/investment", message: "Hello TERRAYA, I'd like to know more about your investment advisory." },
+  { prefix: "/services", message: "Hello TERRAYA, I'd like to know more about your services." },
+  { prefix: "/about", message: "Hello TERRAYA, I'd like to know more about your agency." },
+  { prefix: "/consultation", message: "Hello TERRAYA, I'd like to arrange a private consultation." },
+  { prefix: "/contact", message: "Hello TERRAYA, I'd like to get in touch." },
+];
+
+export function whatsappMessageForPath(pathname: string): string {
+  const match = ROUTE_MESSAGES.find((r) => pathname.startsWith(r.prefix));
+  return match?.message ?? "Hello TERRAYA, I have a question.";
+}

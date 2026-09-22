@@ -8,8 +8,10 @@ import { PropertyGallery } from "@/components/properties/PropertyGallery";
 import { LazyMap } from "@/components/properties/LazyMap";
 import { PropertyCard } from "@/components/properties/PropertyCard";
 import { InquiryForm } from "@/components/properties/InquiryForm";
-import { formatArea, listingPriceLabel, rentalTerms } from "@/lib/utils";
+import { formatArea, formatListingPrice, listingPriceLabel, rentalTerms } from "@/lib/utils";
 import { Price } from "@/components/shared/Price";
+import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
+import { whatsappHref } from "@/lib/contact";
 
 export async function generateStaticParams() {
   return (await getPropertySlugs()).map((slug) => ({ slug }));
@@ -40,6 +42,9 @@ export default async function PropertyDetailPage({
   const similar = (await getAllProperties())
     .filter((x) => x.slug !== p.slug && x.listingType === p.listingType && x.type === p.type)
     .slice(0, 3);
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const whatsappMessage = `Hello TERRAYA, I'm interested in ${p.title} (${formatListingPrice(p.priceEur, p.listingType)}) — ${p.city}, ${p.country}.\n${siteUrl}/properties/${p.slug}`;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -86,6 +91,14 @@ export default async function PropertyDetailPage({
                 {rentalTerms(p.listingType)}
               </p>
             )}
+            <a
+              href={whatsappHref(whatsappMessage)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex items-center gap-2 bg-sand-900 px-6 py-3 text-[0.68rem] uppercase tracking-[0.22em] text-sand-50 transition-colors hover:bg-sand-700 dark:bg-sand-100 dark:text-sand-900 dark:hover:bg-sand-300"
+            >
+              <WhatsAppIcon size={15} /> Ask about this property
+            </a>
           </div>
         </div>
 

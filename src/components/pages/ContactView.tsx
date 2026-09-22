@@ -4,15 +4,10 @@ import { Clock, MapPin, Phone, ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { InquiryForm } from "@/components/properties/InquiryForm";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
-import { CONTACT, whatsappHref } from "@/lib/contact";
+import { CONTACT, whatsappHref, whatsappMessageForPath } from "@/lib/contact";
 import { useLang } from "@/lib/i18n";
 
-const offices = [
-  { city: "Paris", lines: ["8e arrondissement", "+33 1 00 00 00 00"] },
-  { city: "Marrakech", lines: ["Hivernage", "+212 5 24 00 00 00"] },
-  { city: "Lisbon", lines: ["Chiado", "+351 21 000 00 00"] },
-  { city: "Milan", lines: ["Brera", "+39 02 0000 0000"] },
-];
+const offices = [{ city: "Marrakech", lines: ["Hivernage", CONTACT.phone] }];
 
 export function ContactView() {
   const { t } = useLang();
@@ -28,7 +23,7 @@ export function ContactView() {
             {t("contact.text")}
           </p>
 
-          <div className="mt-16 grid gap-10 sm:grid-cols-2">
+          <div className="mt-16 grid gap-10 max-w-xs">
             {offices.map((o) => (
               <div key={o.city} className="border-t border-sand-300 dark:border-sand-700 pt-5">
                 <p className="font-display text-2xl text-sand-900 dark:text-sand-100">{o.city}</p>
@@ -41,7 +36,7 @@ export function ContactView() {
 
           <div className="mt-16">
             <p className="eyebrow mb-2">{t("contact.general")}</p>
-            <p className="font-display text-xl text-sand-900 dark:text-sand-100">private@terraya.com</p>
+            <p className="font-display text-xl text-sand-900 dark:text-sand-100">{CONTACT.email}</p>
           </div>
         </div>
 
@@ -81,7 +76,7 @@ export function ContactView() {
             </div>
             <div className="mt-auto flex flex-wrap gap-3">
               <a
-                href={whatsappHref()}
+                href={whatsappHref(whatsappMessageForPath("/contact"))}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-sand-900 px-6 py-3 text-[0.68rem] uppercase tracking-[0.22em] text-sand-50 transition-colors hover:bg-sand-700 dark:bg-sand-100 dark:text-sand-900 dark:hover:bg-sand-300"

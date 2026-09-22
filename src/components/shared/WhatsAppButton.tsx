@@ -1,15 +1,17 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useLang } from "@/lib/i18n";
-import { whatsappHref } from "@/lib/contact";
+import { whatsappHref, whatsappMessageForPath } from "@/lib/contact";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 
 export function WhatsAppButton() {
   const { t } = useLang();
+  const pathname = usePathname();
 
   return (
     <a
-      href={whatsappHref()}
+      href={whatsappHref(whatsappMessageForPath(pathname ?? "/"))}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={t("whatsapp.label")}
