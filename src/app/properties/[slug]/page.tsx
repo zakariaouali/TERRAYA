@@ -8,7 +8,7 @@ import { PropertyGallery } from "@/components/properties/PropertyGallery";
 import { LazyMap } from "@/components/properties/LazyMap";
 import { PropertyCard } from "@/components/properties/PropertyCard";
 import { InquiryForm } from "@/components/properties/InquiryForm";
-import { formatArea, listingPriceLabel } from "@/lib/utils";
+import { formatArea, listingPriceLabel, rentalTerms } from "@/lib/utils";
 import { Price } from "@/components/shared/Price";
 
 export async function generateStaticParams() {
@@ -79,8 +79,13 @@ export default async function PropertyDetailPage({
             </p>
           </div>
           <div className="lg:text-right">
-            <p className="eyebrow">{listingPriceLabel(p.listingType, p.rentalPeriod)}</p>
-            <Price eur={p.priceEur} listingType={p.listingType} rentalPeriod={p.rentalPeriod} className="font-display text-4xl lg:text-5xl text-sand-900 dark:text-sand-100 mt-2 block" />
+            <p className="eyebrow">{listingPriceLabel(p.listingType)}</p>
+            <Price eur={p.priceEur} listingType={p.listingType} className="font-display text-4xl lg:text-5xl text-sand-900 dark:text-sand-100 mt-2 block" />
+            {rentalTerms(p.listingType) && (
+              <p className="mt-1 text-xs tracking-[0.2em] uppercase text-sand-500 dark:text-sand-500">
+                {rentalTerms(p.listingType)}
+              </p>
+            )}
           </div>
         </div>
 

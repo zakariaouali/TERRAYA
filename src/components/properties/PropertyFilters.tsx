@@ -10,7 +10,6 @@ const LISTING_TYPES = [
   { value: "", label: "All" },
   { value: "SALE", label: "Buy" },
   { value: "RENT", label: "Rent" },
-  { value: "HOLIDAY_RENT", label: "Vacation Rent" },
 ];
 
 export function PropertyFilters() {

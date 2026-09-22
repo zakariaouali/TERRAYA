@@ -18,28 +18,26 @@ export function formatEur(value: number | bigint): string {
 const PRICE_SUFFIX: Record<ListingType, string> = {
   SALE: "",
   RENT: " / month",
-  HOLIDAY_RENT: " / night",
 };
 
 const PRICE_LABEL: Record<ListingType, string> = {
   SALE: "Guide Price",
   RENT: "Monthly Rent",
-  HOLIDAY_RENT: "Nightly Rate",
 };
 
-export type RentalPeriod = "DAY" | "WEEK";
-
-export function formatListingPrice(
-  value: number | bigint,
-  listingType: ListingType,
-  _rentalPeriod?: RentalPeriod
-): string {
+export function formatListingPrice(value: number | bigint, listingType: ListingType): string {
   return `${formatEur(value)}${PRICE_SUFFIX[listingType]}`;
 }
 
-export function listingPriceLabel(listingType: ListingType, rentalPeriod?: RentalPeriod | null): string {
-  if (listingType === "HOLIDAY_RENT") return rentalPeriod === "WEEK" ? "Weekly Rate" : "Nightly Rate";
+export function listingPriceLabel(listingType: ListingType): string {
   return PRICE_LABEL[listingType];
+}
+
+// TERRAYA is long-term-only: every rental carries the same firm minimum stay.
+export const RENT_MIN_STAY_MONTHS = 6;
+
+export function rentalTerms(listingType: ListingType): string {
+  return listingType === "RENT" ? `${RENT_MIN_STAY_MONTHS}-month minimum` : "";
 }
 
 export function formatArea(sqm: number): string {

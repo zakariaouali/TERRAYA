@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "A curated collection of exceptional properties from the TERRAYA portfolio.",
 };
 
-type SearchParams = { q?: string; type?: string; listingType?: string; period?: string; bedrooms?: string; min?: string; max?: string };
+type SearchParams = { q?: string; type?: string; listingType?: string; bedrooms?: string; min?: string; max?: string };
 
 const COPY: Record<ListingType | "ALL", { eyebrow: string; title: string; description: string }> = {
   ALL: {
@@ -29,13 +29,7 @@ const COPY: Record<ListingType | "ALL", { eyebrow: string; title: string; descri
     eyebrow: "For Rent",
     title: "Long-term residences, ready to call home.",
     description:
-      "Furnished, fully managed residences offered on long-term lease across the regions we know personally.",
-  },
-  HOLIDAY_RENT: {
-    eyebrow: "Vacation Rentals",
-    title: "Escapes, held to the same standard.",
-    description:
-      "Private villas and riads available by the night, surveyed and staffed to the same standard as our portfolio for sale.",
+      "Furnished, fully managed residences offered on a long-term lease — six months minimum — in Marrakech.",
   },
 };
 
@@ -48,7 +42,6 @@ export default async function PropertiesPage({
   const q = (sp.q ?? "").toLowerCase();
   const type = sp.type ?? "";
   const listingType = (sp.listingType ?? "") as ListingType | "";
-  const period = (sp.period ?? "").toUpperCase() as "DAY" | "WEEK" | "";
   const bedrooms = sp.bedrooms ? Number(sp.bedrooms) : 0;
   const min = sp.min ? Number(sp.min) : 0;
   const max = sp.max ? Number(sp.max) : Infinity;
@@ -58,7 +51,6 @@ export default async function PropertiesPage({
     if (q && ![p.title, p.city, p.country, p.location].some((v) => v.toLowerCase().includes(q))) return false;
     if (type && p.type !== type) return false;
     if (listingType && p.listingType !== listingType) return false;
-    if (period && p.rentalPeriod !== period) return false;
     if (bedrooms && p.bedrooms < bedrooms) return false;
     if (listingType === "SALE" || !listingType) {
       if (p.priceEur < min || p.priceEur > max) return false;
@@ -79,11 +71,6 @@ export default async function PropertiesPage({
           <p className="mt-6 text-sand-700 dark:text-sand-300 text-lg leading-relaxed">
             {copy.description}
           </p>
-          {period && (
-            <span className="mt-6 inline-flex items-center border border-sand-300 dark:border-sand-700 px-4 py-2 text-[0.66rem] uppercase tracking-[0.26em] text-sand-800 dark:text-sand-200">
-              {period === "DAY" ? "Available by the day" : "Available by the week"}
-            </span>
-          )}
         </div>
 
         <div className="mt-16">

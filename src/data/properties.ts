@@ -1,7 +1,7 @@
 export type PropertyTypeLiteral =
   | "VILLA" | "ESTATE" | "PENTHOUSE" | "RESIDENCE" | "RIAD" | "LAND";
 
-export type ListingType = "SALE" | "RENT" | "HOLIDAY_RENT";
+export type ListingType = "SALE" | "RENT";
 
 export type SeedProperty = {
   slug: string;
@@ -10,7 +10,6 @@ export type SeedProperty = {
   description: string;
   type: PropertyTypeLiteral;
   listingType: ListingType;
-  rentalPeriod?: "DAY" | "WEEK";
   location: string;
   city: string;
   country: string;
@@ -102,16 +101,15 @@ export const properties: SeedProperty[] = [
   {
     slug: "riad-jasmin-marrakech",
     title: "Riad Jasmin",
-    tagline: "A jasmine-scented courtyard riad, by the night.",
+    tagline: "A jasmine-scented courtyard riad, offered long-term.",
     description:
-      "Behind an unmarked door a few minutes from Jemaa el-Fnaa, Riad Jasmin wraps a plunge-pool courtyard scented with jasmine and orange blossom. Four ensuite rooms, a rooftop terrace for evenings, and a small dedicated staff make this a private alternative to a hotel — available by the night, year-round.",
+      "Behind an unmarked door a few minutes from Jemaa el-Fnaa, Riad Jasmin wraps a plunge-pool courtyard scented with jasmine and orange blossom. Four ensuite rooms, a rooftop terrace for evenings, and a small dedicated staff make this a private alternative to a hotel — offered furnished on a long-term lease.",
     type: "RIAD",
-    listingType: "HOLIDAY_RENT",
-    rentalPeriod: "DAY",
+    listingType: "RENT",
     location: "Medina of Marrakech",
     city: "Marrakech",
     country: "Morocco",
-    priceEur: 1450,
+    priceEur: 3600,
     bedrooms: 4,
     bathrooms: 4,
     areaSqm: 320,
@@ -125,8 +123,8 @@ export const properties: SeedProperty[] = [
     amenities: ["Courtyard Pool", "Rooftop Terrace", "Daily Breakfast", "Airport Transfer"],
     highlights: [
       "Three minutes' walk from Jemaa el-Fnaa, behind an unmarked door",
-      "Breakfast and turndown service included",
-      "Available by the night, year-round",
+      "Offered furnished on an annual lease",
+      "Dedicated staff included",
     ],
     latitude: 31.6258,
     longitude: -7.9891,

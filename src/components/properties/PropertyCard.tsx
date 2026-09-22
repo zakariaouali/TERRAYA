@@ -10,11 +10,11 @@ import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 import { CONTACT, whatsappHref } from "@/lib/contact";
 import { propertyTaglineFr } from "@/data/content.fr";
 import { useLang } from "@/lib/i18n";
+import { rentalTerms } from "@/lib/utils";
 
 const LISTING_BADGE: Record<SeedProperty["listingType"], string | null> = {
   SALE: null,
   RENT: "For Rent",
-  HOLIDAY_RENT: "Vacation Rental",
 };
 
 export function PropertyCard({ p }: { p: SeedProperty }) {
@@ -77,11 +77,16 @@ export function PropertyCard({ p }: { p: SeedProperty }) {
       </div>
 
       <div className="mt-5 flex items-baseline justify-between gap-4">
-        <Price eur={p.priceEur} listingType={p.listingType} rentalPeriod={p.rentalPeriod} className="font-display text-xl text-sand-900 dark:text-sand-100" />
+        <Price eur={p.priceEur} listingType={p.listingType} className="font-display text-xl text-sand-900 dark:text-sand-100" />
         <p className="text-xs tracking-[0.22em] uppercase text-sand-600 dark:text-sand-400">
           {p.bedrooms} bd · {p.bathrooms} ba · {p.areaSqm} m²
         </p>
       </div>
+      {rentalTerms(p.listingType) && (
+        <p className="mt-1 text-xs tracking-[0.18em] uppercase text-sand-500 dark:text-sand-500">
+          {rentalTerms(p.listingType)}
+        </p>
+      )}
       <p className="mt-3 text-sand-700/90 dark:text-sand-300 leading-relaxed line-clamp-2">{tagline}</p>
 
       {/* Stretched navigation link sits under the interactive overlays (favorite / contact) */}

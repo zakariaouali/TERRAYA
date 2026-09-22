@@ -14,7 +14,6 @@ export type PropertyFormData = {
   description: string;
   type: string;
   listingType: string;
-  rentalPeriod: string;
   status: string;
   location: string;
   city: string;
@@ -35,7 +34,7 @@ export type PropertyFormData = {
 
 const EMPTY: PropertyFormData = {
   slug: "", title: "", tagline: "", description: "", type: "VILLA", listingType: "SALE",
-  rentalPeriod: "", status: "AVAILABLE", location: "", city: "", country: "", priceEur: 0,
+  status: "AVAILABLE", location: "", city: "", country: "", priceEur: 0,
   bedrooms: 0, bathrooms: 0, areaSqm: 0, landSqm: null, yieldPercent: null, featured: false,
   images: [], amenities: [], highlights: [], latitude: null, longitude: null,
 };
@@ -107,7 +106,6 @@ export function PropertyForm({ initial, id }: { initial?: Partial<PropertyFormDa
       ...data,
       slug: data.slug || slugify(data.title),
       tagline: data.tagline || null,
-      rentalPeriod: data.listingType === "HOLIDAY_RENT" && data.rentalPeriod ? data.rentalPeriod : null,
       heroImage: data.images[0],
       landSqm: data.landSqm || null,
       yieldPercent: data.yieldPercent || null,
@@ -177,20 +175,9 @@ export function PropertyForm({ initial, id }: { initial?: Partial<PropertyFormDa
           <Label htmlFor="listingType">Listing</Label>
           <Select id="listingType" value={data.listingType} onChange={(e) => set("listingType", e.target.value)}>
             <option value="SALE">For Sale</option>
-            <option value="RENT">For Rent</option>
-            <option value="HOLIDAY_RENT">Holiday Rental</option>
+            <option value="RENT">For Rent (6-month minimum)</option>
           </Select>
         </div>
-        {data.listingType === "HOLIDAY_RENT" && (
-          <div>
-            <Label htmlFor="rentalPeriod">Rental period</Label>
-            <Select id="rentalPeriod" value={data.rentalPeriod} onChange={(e) => set("rentalPeriod", e.target.value)}>
-              <option value="">—</option>
-              <option value="DAY">Per night</option>
-              <option value="WEEK">Per week</option>
-            </Select>
-          </div>
-        )}
         <div>
           <Label htmlFor="status">Status</Label>
           <Select id="status" value={data.status} onChange={(e) => set("status", e.target.value)}>

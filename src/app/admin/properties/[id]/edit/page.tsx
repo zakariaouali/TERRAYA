@@ -25,7 +25,6 @@ export default async function EditPropertyPage({ params }: { params: Promise<{ i
     description: p.description,
     type: p.type,
     listingType: p.listingType,
-    rentalPeriod: p.rentalPeriod ?? "",
     status: p.status,
     location: p.location,
     city: p.city,

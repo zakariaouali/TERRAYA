@@ -19,7 +19,7 @@ type SearchParams = { slugs?: string };
 const rows: { label: string; value: (p: SeedProperty) => ReactNode }[] = [
   { label: "Location", value: (p) => `${p.city}, ${p.country}` },
   { label: "Type", value: (p) => p.type.charAt(0) + p.type.slice(1).toLowerCase() },
-  { label: "Price", value: (p) => <Price eur={p.priceEur} listingType={p.listingType} rentalPeriod={p.rentalPeriod} /> },
+  { label: "Price", value: (p) => <Price eur={p.priceEur} listingType={p.listingType} /> },
   { label: "Bedrooms", value: (p) => String(p.bedrooms) },
   { label: "Bathrooms", value: (p) => String(p.bathrooms) },
   { label: "Interior", value: (p) => formatArea(p.areaSqm) },

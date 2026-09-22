@@ -20,7 +20,6 @@ function toSeed(p: NonNullable<PropertyRow>): SeedProperty {
     description: p.description,
     type: p.type as SeedProperty["type"],
     listingType: p.listingType as SeedProperty["listingType"],
-    rentalPeriod: (p.rentalPeriod as "DAY" | "WEEK" | null) ?? undefined,
     location: p.location,
     city: p.city,
     country: p.country,

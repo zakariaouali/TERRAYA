@@ -27,14 +27,12 @@ const en: Dict = {
   // Category showcase
   "cat.eyebrow": "Explore",
   "cat.title": "Find your place in the sun.",
-  "cat.lead": "Buy, rent for the long term, or escape by the night — discover the TERRAYA collection by the way you wish to live.",
+  "cat.lead": "Buy, or rent for the long term — discover the TERRAYA collection by the way you wish to live.",
   "cat.cta": "Explore",
   "cat.buy": "Buy",
   "cat.buy.sub": "Estates & residences for sale",
   "cat.rent": "Rent",
-  "cat.rent.sub": "Long stays — one month and beyond",
-  "cat.vacation": "Vacation",
-  "cat.vacation.sub": "By the night",
+  "cat.rent.sub": "Long-term only — six-month minimum",
   // Newsletter
   "newsletter.eyebrow": "The Journal",
   "newsletter.title": "Market briefs and private releases, occasionally.",
@@ -267,14 +265,12 @@ const fr: Dict = {
   // Category showcase
   "cat.eyebrow": "Explorer",
   "cat.title": "Trouvez votre place au soleil.",
-  "cat.lead": "Acheter, louer sur le long terme ou s'évader à la nuitée — découvrez la collection TERRAYA selon votre art de vivre.",
+  "cat.lead": "Acheter, ou louer sur le long terme — découvrez la collection TERRAYA selon votre art de vivre.",
   "cat.cta": "Découvrir",
   "cat.buy": "Acheter",
   "cat.buy.sub": "Domaines et résidences à vendre",
   "cat.rent": "Louer",
-  "cat.rent.sub": "Longues durées — à partir d'un mois",
-  "cat.vacation": "Vacances",
-  "cat.vacation.sub": "À la nuitée",
+  "cat.rent.sub": "Longue durée uniquement — minimum six mois",
   // Newsletter
   "newsletter.eyebrow": "Le Journal",
   "newsletter.title": "Analyses de marché et biens confidentiels, à l'occasion.",

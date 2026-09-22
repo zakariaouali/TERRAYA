@@ -4,7 +4,7 @@
 export const propertyTaglineFr: Record<string, string> = {
   "villa-zahra-marrakech": "Une méditation architecturale sur les contreforts de l'Atlas.",
   "pavillon-gueliz-marrakech": "Un pavillon de jardin meublé pour une résidence longue durée.",
-  "riad-jasmin-marrakech": "Un riad à patio parfumé au jasmin, à la nuitée.",
+  "riad-jasmin-marrakech": "Un riad à patio parfumé au jasmin, proposé en longue durée.",
   "domaine-palmeraie-marrakech": "Un domaine clos au cœur de la palmeraie.",
   "appartement-hivernage-marrakech": "Une résidence signée dans le quartier diplomatique de Marrakech.",
   "villa-ourika-marrakech": "Une villa familiale longue durée sur la route de l'Ourika.",
