@@ -217,7 +217,7 @@ export function Header() {
                 onDark ? "text-white/70" : "text-sand-600 dark:text-sand-400"
               )}
             >
-              Marrakech · Casablanca · Dubai · Agadir · Tanger
+              Marrakech · Real Estate
             </p>
             <div
               className={cn(

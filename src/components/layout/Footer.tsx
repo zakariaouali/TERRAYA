@@ -57,7 +57,7 @@ export function Footer() {
             {t("footer.desc")}
           </p>
           <div className="text-sand-600 text-sm space-y-1 dark:text-sand-400">
-            <p>Marrakech · Casablanca · Dubai · Agadir · Tanger</p>
+            <p>Marrakech, Morocco</p>
             <p>
               <a href={CONTACT.phoneHref} className="transition-colors hover:text-sand-900 dark:hover:text-sand-100">
                 {CONTACT.phone}

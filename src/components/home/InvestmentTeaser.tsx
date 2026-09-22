@@ -12,7 +12,7 @@ import { useLang } from "@/lib/i18n";
 const stats = [
   { prefix: "€", value: 1.4, decimals: 1, suffix: "B", labelKey: "home.inv.stat1" },
   { value: 6.1, decimals: 1, suffix: "%", labelKey: "home.inv.stat2" },
-  { value: 27, decimals: 0, suffix: "", labelKey: "home.inv.stat3" },
+  { value: 15, decimals: 0, suffix: "", labelKey: "home.inv.stat3" },
   { value: 92, decimals: 0, suffix: "%", labelKey: "home.inv.stat4" },
 ];
 

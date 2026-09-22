@@ -7,11 +7,11 @@ import { FadeIn } from "@/components/shared/FadeIn";
 import { useLang } from "@/lib/i18n";
 
 const tiles = [
-  { labelKey: "home.life.marrakech", image: "https://images.unsplash.com/photo-1565020244281-fe53df7df170?auto=format&fit=crop&w=1400&q=80" },
-  { labelKey: "home.life.casablanca", image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1400&q=80" },
-  { labelKey: "home.life.dubai", image: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1400&q=80" },
-  { labelKey: "home.life.agadir", image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=80" },
-  { labelKey: "home.life.tanger", image: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=1400&q=80" },
+  { labelKey: "home.life.medina", image: "https://images.unsplash.com/photo-1565020244281-fe53df7df170?auto=format&fit=crop&w=1400&q=80" },
+  { labelKey: "home.life.gueliz", image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1400&q=80" },
+  { labelKey: "home.life.hivernage", image: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1400&q=80" },
+  { labelKey: "home.life.palmeraie", image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1400&q=80" },
+  { labelKey: "home.life.ourika", image: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?auto=format&fit=crop&w=1400&q=80" },
 ];
 
 export function Lifestyle() {

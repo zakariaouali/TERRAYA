@@ -14,12 +14,12 @@ const pillars = [
 ];
 
 const markets = [
-  { name: "Marrakech", yield: "6–8%", trend: "Expanding" },
-  { name: "Luberon", yield: "3–5%", trend: "Scarce" },
-  { name: "Amalfi", yield: "4–6%", trend: "Stable" },
-  { name: "Comporta", yield: "4–6%", trend: "Emerging" },
-  { name: "Saint-Tropez", yield: "2–4%", trend: "Scarce" },
-  { name: "Patmos", yield: "3–5%", trend: "Emerging" },
+  { name: "Route de l'Ourika", yield: "6–8%", trend: "Expanding" },
+  { name: "Palmeraie", yield: "5–6%", trend: "Stable" },
+  { name: "Hivernage", yield: "6–7%", trend: "Expanding" },
+  { name: "Gueliz", yield: "5–7%", trend: "Scarce" },
+  { name: "Medina", yield: "6–9%", trend: "Scarce" },
+  { name: "Kasbah", yield: "5–8%", trend: "Emerging" },
 ];
 
 export function InvestmentView() {
