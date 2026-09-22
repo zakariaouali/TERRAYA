@@ -14,6 +14,18 @@ import { ok, fail } from "@/lib/api";
 const MAX_BYTES = 5 * 1024 * 1024; // 5MB per photo
 const MAX_PHOTOS = 5;
 
+async function cleanupFiles(paths: string[]) {
+  await Promise.all(
+    paths.map(async (p) => {
+      try {
+        await fs.unlink(p);
+      } catch (err) {
+        console.error("[listing-submissions] cleanup failed", p, err);
+      }
+    })
+  );
+}
+
 export async function POST(req: NextRequest) {
   const ip = clientIp(req);
   const rl = rateLimit(`listing-submission:${ip}`, 5, 60_000);
@@ -43,39 +55,56 @@ export async function POST(req: NextRequest) {
   if (files.length === 0) return fail("Add at least one photo.");
   if (files.length > MAX_PHOTOS) return fail(`Add at most ${MAX_PHOTOS} photos.`);
 
-  const dir = path.join(process.cwd(), "public", "uploads");
-  const urls: string[] = [];
+  // Validate every photo (size + type sniff) BEFORE writing anything to disk,
+  // so a failure partway through never leaves earlier photos orphaned.
+  const validated: { buf: Buffer; detected: string }[] = [];
   for (const file of files) {
     if (file.size > MAX_BYTES) return fail("Each photo must be 5MB or smaller.");
     const buf = Buffer.from(await file.arrayBuffer());
     const detected = sniffImageType(buf);
     if (!detected) return fail("One of the files is not a supported image (JPEG, PNG, WebP, or AVIF).");
+    validated.push({ buf, detected });
+  }
 
-    const name = `submission-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${detected}`;
-    try {
-      await fs.mkdir(dir, { recursive: true });
-      await fs.writeFile(path.join(dir, name), buf);
-    } catch (err) {
-      console.error("[listing-submissions]", err);
-      return fail("Could not save the photos.", 500);
+  const dir = path.join(process.cwd(), "public", "uploads");
+  const urls: string[] = [];
+  const writtenPaths: string[] = [];
+  try {
+    await fs.mkdir(dir, { recursive: true });
+    for (const { buf, detected } of validated) {
+      const name = `submission-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${detected}`;
+      const fullPath = path.join(dir, name);
+      await fs.writeFile(fullPath, buf);
+      writtenPaths.push(fullPath);
+      urls.push(`/uploads/${name}`);
     }
-    urls.push(`/uploads/${name}`);
+  } catch (err) {
+    console.error("[listing-submissions]", err);
+    await cleanupFiles(writtenPaths);
+    return fail("Could not save the photos.", 500);
   }
 
   const data = parsed.data;
   const email = data.email.toLowerCase();
 
-  const submission = await prisma.listingSubmission.create({
-    data: {
-      name: data.name,
-      phone: data.phone,
-      email,
-      propertyType: data.propertyType,
-      city: data.city,
-      images: JSON.stringify(urls),
-      ip,
-    },
-  });
+  let submission;
+  try {
+    submission = await prisma.listingSubmission.create({
+      data: {
+        name: data.name,
+        phone: data.phone,
+        email,
+        propertyType: data.propertyType,
+        city: data.city,
+        images: JSON.stringify(urls),
+        ip,
+      },
+    });
+  } catch (err) {
+    console.error("[listing-submissions]", err);
+    await cleanupFiles(writtenPaths);
+    return fail("Could not save the submission.", 500);
+  }
 
   const client = sellerClientEmail({ name: data.name });
   await sendEmail({ to: email, subject: client.subject, html: client.html });
