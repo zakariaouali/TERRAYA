@@ -16,6 +16,13 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   const { id } = await params;
   const p = await findByIdOrSlug(id);
   if (!p) return fail("Not found.", 404);
+
+  if (p.status === "DRAFT") {
+    const session = await getSession();
+    const isStaff = !!session && (session.role === "ADMIN" || session.role === "EDITOR");
+    if (!isStaff) return fail("Not found.", 404);
+  }
+
   return ok({ ...p, priceEur: p.priceEur.toString() });
 }
 

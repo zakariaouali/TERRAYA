@@ -6,6 +6,8 @@ import { rateLimit, clientIp } from "@/lib/rate-limit";
 import { audit } from "@/lib/audit";
 import { ok, fail } from "@/lib/api";
 
+const PUBLIC_STATUSES = new Set(["AVAILABLE", "RESERVED", "SOLD"]);
+
 export async function GET(req: NextRequest) {
   const ip = clientIp(req);
   const rl = rateLimit(`api:public:${ip}`, 60, 60_000);
@@ -13,7 +15,18 @@ export async function GET(req: NextRequest) {
 
   const url = new URL(req.url);
   const featured = url.searchParams.get("featured");
-  const status = url.searchParams.get("status") ?? "AVAILABLE";
+  const requestedStatus = url.searchParams.get("status");
+
+  const session = await getSession();
+  const isStaff = !!session && (session.role === "ADMIN" || session.role === "EDITOR");
+
+  // Anonymous callers may only ever see public statuses. A status outside that
+  // set (e.g. DRAFT) silently falls back to the public default instead of
+  // being honored, so an unauthenticated client can never enumerate drafts.
+  const status =
+    requestedStatus && (isStaff || PUBLIC_STATUSES.has(requestedStatus))
+      ? requestedStatus
+      : "AVAILABLE";
 
   const list = await prisma.property.findMany({
     where: {
