@@ -55,11 +55,12 @@ npm install
 
 # 2. Configure
 cp .env.example .env
-# Edit DATABASE_URL, JWT_SECRET (>=32 chars), ADMIN_EMAIL, ADMIN_PASSWORD
+# Point DATABASE_URL at a MySQL/MariaDB instance (locally, XAMPP's MySQL works —
+# inspect it with phpMyAdmin). Set JWT_SECRET (>=32 chars), ADMIN_EMAIL, ADMIN_PASSWORD.
 
 # 3. Provision database
-npm run db:push      # or: npm run db:migrate
-npm run db:seed      # Creates admin user + 6 sample properties
+npm run db:migrate   # applies the Prisma migrations
+npm run db:seed      # Creates admin user + 10 sample properties
 
 # 4. Run
 npm run dev
@@ -71,7 +72,7 @@ npm run dev
 
 | Var | Purpose |
 | --- | --- |
-| `DATABASE_URL` | PostgreSQL connection string |
+| `DATABASE_URL` | MySQL/MariaDB connection string |
 | `JWT_SECRET` | HS256 signing secret — **must be ≥ 32 chars** |
 | `ADMIN_EMAIL` | Seeded admin email |
 | `ADMIN_PASSWORD` | Seeded admin password — change after first login |
@@ -87,16 +88,19 @@ npm run dev
 - **Audit log**: every login (success/fail), inquiry, and property mutation written to `AuditLog` with IP + user-agent.
 - **Headers**: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` locking down camera/mic/geo, `X-Powered-By` removed.
 
-## Deployment
+## Deployment (Docker)
 
-The app deploys cleanly to Vercel.
+The app ships with a `Dockerfile` and `docker-compose.yml` that run the Next.js
+app and a MySQL 8 container together. There is no reverse proxy in the
+compose file — front it with whatever proxy/SSL setup you already run on your
+server.
 
-1. Push to GitHub.
-2. Import the repo in Vercel.
-3. Set all env vars in **Project → Settings → Environment Variables**.
-4. Add a Vercel Postgres or external PostgreSQL (Neon, Supabase, RDS).
-5. In **Build & Development Settings** set the build command to `prisma generate && next build`.
-6. After first deploy, run `npm run db:push && npm run db:seed` locally against the production `DATABASE_URL` (or trigger a one-off Vercel Job).
+1. Copy `.env.example` to `.env` and fill in real values, including the
+   `MYSQL_*` variables.
+2. `docker compose up -d --build`
+3. First deploy only: `docker compose exec app npx prisma migrate deploy`
+   then `docker compose exec app npm run db:seed`.
+4. Point your server's reverse proxy at the port `docker-compose.yml` exposes.
 
 ## Notes for further extension
 
