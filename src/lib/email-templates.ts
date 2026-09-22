@@ -96,3 +96,36 @@ export function consultationOwnerEmail(data: {
     ),
   };
 }
+
+export function sellerClientEmail(data: { name: string }): { subject: string; html: string } {
+  return {
+    subject: "We've received your property submission — TERRAYA",
+    html: wrap(
+      "Thank you.",
+      `<p style="font-size: 15px; line-height: 1.6;">Dear ${escapeHtml(data.name)},</p>
+       <p style="font-size: 15px; line-height: 1.6;">We've received your property submission. A member of our office will contact you directly by phone or WhatsApp to learn more, and if it's a fit, we'll arrange for our own team to photograph the property professionally — free of charge. There is no commission unless and until we complete a sale or rental for you.</p>
+       <p style="font-size: 15px; line-height: 1.6;">If it's more convenient, you're welcome to reach us directly on WhatsApp at +212 694-838739.</p>`
+    ),
+  };
+}
+
+export function sellerOwnerEmail(data: {
+  name: string;
+  phone: string;
+  email: string;
+  propertyType: string;
+  city: string;
+}): { subject: string; html: string } {
+  return {
+    subject: `New listing submission — ${data.name}`,
+    html: wrap(
+      "New listing submission.",
+      `${row("Name", data.name)}
+       ${row("Phone", data.phone)}
+       ${row("Email", data.email)}
+       ${row("Property type", data.propertyType)}
+       ${row("City", data.city)}
+       <p style="margin: 16px 0 0; font-size: 13px; color: #55493d;">Review it and its photos in /admin/listings.</p>`
+    ),
+  };
+}

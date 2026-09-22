@@ -27,6 +27,14 @@ export const consultationSchema = z.object({
   message: z.string().max(2000).optional(),
 });
 
+export const listingSubmissionSchema = z.object({
+  name: z.string().min(2).max(120),
+  phone: z.string().min(4).max(40),
+  email: z.string().email().max(255),
+  propertyType: z.enum(["VILLA", "ESTATE", "PENTHOUSE", "RESIDENCE", "RIAD", "LAND"]),
+  city: z.string().min(2).max(120),
+});
+
 // Accepts a full http(s) URL or an app-relative path (e.g. an uploaded "/uploads/x.jpg").
 const imageRef = z
   .string()
@@ -64,3 +72,4 @@ export type LoginInput = z.infer<typeof loginSchema>;
 export type InquiryInput = z.infer<typeof inquirySchema>;
 export type NewsletterInput = z.infer<typeof newsletterSchema>;
 export type PropertyInput = z.infer<typeof propertyUpsertSchema>;
+export type ListingSubmissionInput = z.infer<typeof listingSubmissionSchema>;
