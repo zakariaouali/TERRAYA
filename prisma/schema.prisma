@@ -112,3 +112,19 @@ model ConsultationRequest {
 
   @@index([createdAt])
 }
+
+model ListingSubmission {
+  id                  String   @id @default(cuid())
+  name                String
+  phone               String
+  email               String   @db.VarChar(255)
+  propertyType        String // VILLA | ESTATE | PENTHOUSE | RESIDENCE | RIAD | LAND
+  city                String
+  images              String   @db.Text // JSON-encoded string[]
+  status              String   @default("NEW") // NEW | CONTACTED | CONVERTED | DECLINED
+  convertedPropertyId String?
+  ip                  String?
+  createdAt           DateTime @default(now())
+
+  @@index([status, createdAt])
+}
