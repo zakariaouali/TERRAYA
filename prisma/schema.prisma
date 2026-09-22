@@ -1,12 +1,11 @@
-// SQLite for zero-setup local/demo use. The schema avoids native enums and
-// array columns (stored as JSON strings) so it is portable to PostgreSQL —
-// to switch, change the provider to "postgresql" and update DATABASE_URL.
+// MySQL. The schema avoids native enums and array columns (stored as JSON
+// strings) so it stays portable across MySQL/MariaDB/Postgres.
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -85,4 +84,27 @@ model AuditLog {
   createdAt DateTime @default(now())
 
   @@index([entity, createdAt])
+}
+
+model NewsletterSignup {
+  id        String   @id @default(cuid())
+  email     String
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model ConsultationRequest {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  date      String?
+  time      String?
+  message   String?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
 }
