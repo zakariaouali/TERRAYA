@@ -18,9 +18,14 @@ export function rateLimit(key: string, limit: number, windowMs: number): RateLim
 
 export function clientIp(req: Request): string {
   const h = req.headers;
-  return (
-    h.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    h.get("x-real-ip") ||
-    "unknown"
-  );
+  const xff = h.get("x-forwarded-for");
+  if (xff) {
+    // Take the LAST hop, not the first: with exactly one reverse proxy in front
+    // of this app, the last entry is the IP the proxy itself observed — the
+    // client cannot control it. The first entry is whatever the client sent
+    // and is trivially spoofable.
+    const hops = xff.split(",").map((s) => s.trim()).filter(Boolean);
+    if (hops.length > 0) return hops[hops.length - 1];
+  }
+  return h.get("x-real-ip") || "unknown";
 }
