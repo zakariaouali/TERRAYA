@@ -51,12 +51,12 @@ export function PropertyFilters() {
           defaultValue={params.get("q") ?? ""}
           onChange={(e) => update("q", e.target.value)}
           placeholder="Search by city, country, or name"
-          className="h-12 border-b border-sand-300 dark:border-sand-700 bg-transparent px-1 text-sand-900 dark:text-sand-100 placeholder:text-sand-500 dark:placeholder:text-sand-400 focus:outline-none focus:border-sand-700 dark:focus:border-sand-400"
+          className="h-12 border-b border-sand-300 dark:border-sand-700 bg-transparent px-1 font-sans text-sand-900 dark:text-sand-100 placeholder:text-sand-500 dark:placeholder:text-sand-400 focus:outline-none focus:border-sand-700 dark:focus:border-sand-400"
         />
         <select
           defaultValue={params.get("type") ?? ""}
           onChange={(e) => update("type", e.target.value)}
-          className="h-12 border-b border-sand-300 dark:border-sand-700 bg-transparent px-1 text-sand-900 dark:text-sand-100 focus:outline-none focus:border-sand-700 dark:focus:border-sand-400"
+          className="h-12 border-b border-sand-300 dark:border-sand-700 bg-transparent px-1 font-sans text-sand-900 dark:text-sand-100 focus:outline-none focus:border-sand-700 dark:focus:border-sand-400"
         >
           {TYPES.map((t) => (
             <option key={t} value={t}>{t || "All property types"}</option>
@@ -65,7 +65,7 @@ export function PropertyFilters() {
         <select
           defaultValue={params.get("bedrooms") ?? ""}
           onChange={(e) => update("bedrooms", e.target.value)}
-          className="h-12 border-b border-sand-300 dark:border-sand-700 bg-transparent px-1 text-sand-900 dark:text-sand-100 focus:outline-none focus:border-sand-700 dark:focus:border-sand-400"
+          className="h-12 border-b border-sand-300 dark:border-sand-700 bg-transparent px-1 font-sans text-sand-900 dark:text-sand-100 focus:outline-none focus:border-sand-700 dark:focus:border-sand-400"
         >
           <option value="">Any bedrooms</option>
           {[2, 3, 4, 5, 6, 8].map((n) => (
@@ -77,7 +77,7 @@ export function PropertyFilters() {
             <select
               defaultValue={params.get("min") ?? ""}
               onChange={(e) => update("min", e.target.value)}
-              className="h-12 border-b border-sand-300 dark:border-sand-700 bg-transparent px-1 text-sand-900 dark:text-sand-100 focus:outline-none focus:border-sand-700 dark:focus:border-sand-400"
+              className="h-12 border-b border-sand-300 dark:border-sand-700 bg-transparent px-1 font-sans text-sand-900 dark:text-sand-100 focus:outline-none focus:border-sand-700 dark:focus:border-sand-400"
             >
               <option value="">Min price</option>
               {[1_000_000, 2_500_000, 5_000_000, 10_000_000, 25_000_000].map((n) => (
@@ -87,7 +87,7 @@ export function PropertyFilters() {
             <select
               defaultValue={params.get("max") ?? ""}
               onChange={(e) => update("max", e.target.value)}
-              className="h-12 border-b border-sand-300 dark:border-sand-700 bg-transparent px-1 text-sand-900 dark:text-sand-100 focus:outline-none focus:border-sand-700 dark:focus:border-sand-400"
+              className="h-12 border-b border-sand-300 dark:border-sand-700 bg-transparent px-1 font-sans text-sand-900 dark:text-sand-100 focus:outline-none focus:border-sand-700 dark:focus:border-sand-400"
             >
               <option value="">Max price</option>
               {[2_500_000, 5_000_000, 10_000_000, 25_000_000, 50_000_000].map((n) => (

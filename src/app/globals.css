@@ -21,7 +21,11 @@
 html, body {
   background-color: rgb(var(--bg));
   color: rgb(var(--fg));
-  font-family: var(--font-sans);
+  /* Site-wide unification: everything reads in the same serif family used
+     on the navbar and hero. Small uppercase tracked labels (.eyebrow) and
+     form inputs opt back into the sans font below, for legibility at
+     small sizes. */
+  font-family: var(--font-serif);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
