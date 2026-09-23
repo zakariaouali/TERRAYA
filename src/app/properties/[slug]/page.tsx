@@ -95,7 +95,7 @@ export default async function PropertyDetailPage({
 
             <div className="mt-8 border-t border-sand-200 dark:border-sand-800 pt-6">
               <p className="eyebrow">{listingPriceLabel(p.listingType)}</p>
-              <Price eur={p.priceEur} listingType={p.listingType} className="font-display text-3xl lg:text-4xl text-sand-900 dark:text-sand-100 mt-2 block" />
+              <Price eur={p.priceEur} listingType={p.listingType} className="text-3xl lg:text-4xl font-medium text-sand-900 dark:text-sand-100 mt-2 block" />
               {rentalTerms(p.listingType) && (
                 <p className="mt-1 text-xs tracking-[0.2em] uppercase text-sand-500 dark:text-sand-500">
                   {rentalTerms(p.listingType)}
@@ -199,7 +199,7 @@ function Metric({ icon, label, value }: { icon: React.ReactNode; label: string; 
   return (
     <div>
       <div className="flex items-center gap-2 text-sand-600 dark:text-sand-400">{icon}<span className="eyebrow">{label}</span></div>
-      <p className="font-display text-2xl text-sand-900 dark:text-sand-100 mt-1">{value}</p>
+      <p className="text-2xl font-medium text-sand-900 dark:text-sand-100 mt-1">{value}</p>
     </div>
   );
 }

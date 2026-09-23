@@ -37,7 +37,7 @@ export default async function AdminDashboardPage() {
         {tiles.map((t) => (
           <div key={t.label} className="border border-sand-200 p-8 bg-sand-100/60">
             <p className="eyebrow">{t.label}</p>
-            <p className="font-display text-5xl text-sand-900 mt-3">{t.value}</p>
+            <p className="text-5xl font-medium text-sand-900 mt-3">{t.value}</p>
           </div>
         ))}
       </div>

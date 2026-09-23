@@ -72,7 +72,7 @@ export function InvestmentView() {
                 <div className="mt-6 flex items-end justify-between text-sand-300">
                   <div>
                     <p className="eyebrow text-sand-400">{t("inv.market.yield")}</p>
-                    <p className="text-sand-50 font-display text-2xl">{m.yield}</p>
+                    <p className="text-sand-50 text-2xl font-medium">{m.yield}</p>
                   </div>
                   <div className="text-right">
                     <p className="eyebrow text-sand-400">{t("inv.market.cycle")}</p>

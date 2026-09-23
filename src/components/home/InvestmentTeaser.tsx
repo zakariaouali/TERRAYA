@@ -52,7 +52,7 @@ export function InvestmentTeaser() {
           <div className="mt-10 grid grid-cols-2 gap-y-10 gap-x-8 max-w-md">
             {stats.map((s) => (
               <div key={s.labelKey}>
-                <p className="font-display text-4xl text-sand-900 dark:text-sand-100">
+                <p className="text-4xl font-medium text-sand-900 dark:text-sand-100">
                   <CountUp value={s.value} decimals={s.decimals} prefix={s.prefix} suffix={s.suffix} />
                 </p>
                 <p className="mt-2 text-xs tracking-[0.22em] uppercase text-sand-600 dark:text-sand-400 leading-relaxed">

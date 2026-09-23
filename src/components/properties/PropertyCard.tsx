@@ -77,7 +77,7 @@ export function PropertyCard({ p }: { p: SeedProperty }) {
       </div>
 
       <div className="mt-5 flex items-baseline justify-between gap-4">
-        <Price eur={p.priceEur} listingType={p.listingType} className="font-display text-xl text-sand-900 dark:text-sand-100" />
+        <Price eur={p.priceEur} listingType={p.listingType} className="text-xl font-medium text-sand-900 dark:text-sand-100" />
         <p className="text-xs tracking-[0.22em] uppercase text-sand-600 dark:text-sand-400">
           {p.bedrooms} bd · {p.bathrooms} ba · {p.areaSqm} m²
         </p>

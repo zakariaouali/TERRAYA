@@ -21,11 +21,10 @@
 html, body {
   background-color: rgb(var(--bg));
   color: rgb(var(--fg));
-  /* Site-wide unification: everything reads in the same serif family used
-     on the navbar and hero. Small uppercase tracked labels (.eyebrow) and
-     form inputs opt back into the sans font below, for legibility at
-     small sizes. */
-  font-family: var(--font-serif);
+  /* Clean sans-serif base for body text and numbers (legible, professional).
+     The serif (.font-display) is reserved for the "TERRAYA" wordmark,
+     headings and display prices, where it's actually meant to be seen. */
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
