@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { Spinner } from "@/components/shared/Spinner";
 import { useLang } from "@/lib/i18n";
 
 type Status = "idle" | "loading" | "sent" | "error";
@@ -69,7 +70,7 @@ export function NewsletterSignup() {
               aria-label={t("newsletter.cta")}
               className="shrink-0 p-2 text-sand-900 dark:text-sand-100 transition-transform duration-300 hover:translate-x-1 disabled:opacity-50"
             >
-              <ArrowRight size={18} />
+              {status === "loading" ? <Spinner size={18} /> : <ArrowRight size={18} />}
             </button>
           </div>
           {error && <p className="mt-3 text-sm text-red-700 dark:text-red-400">{error}</p>}

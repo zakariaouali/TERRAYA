@@ -6,6 +6,7 @@ import { useState } from "react";
 import { X, Plus, Upload, Star } from "lucide-react";
 import { Input, Textarea, Select, Label } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/shared/Spinner";
 
 export type PropertyFormData = {
   slug: string;
@@ -163,7 +164,7 @@ export function PropertyForm({ initial, id, fromSubmissionId }: { initial?: Part
             </div>
           ))}
           <label className="flex aspect-[4/3] cursor-pointer flex-col items-center justify-center gap-1 border border-dashed border-sand-300 text-sand-500 hover:border-sand-600 hover:text-sand-800">
-            <Upload size={18} />
+            {uploading ? <Spinner size={18} /> : <Upload size={18} />}
             <span className="text-[0.6rem] uppercase tracking-wider">{uploading ? "Uploading…" : "Add photo"}</span>
             <input type="file" accept="image/*" multiple className="hidden" disabled={uploading}
               onChange={(e) => { if (e.target.files?.length) uploadFiles(e.target.files); e.target.value = ""; }} />
@@ -238,7 +239,8 @@ export function PropertyForm({ initial, id, fromSubmissionId }: { initial?: Part
       {error && <p className="text-sm text-red-700">{error}</p>}
 
       <div className="flex gap-3">
-        <Button type="submit" disabled={status === "saving" || uploading}>
+        <Button type="submit" disabled={status === "saving" || uploading} className="gap-2">
+          {status === "saving" && <Spinner size={15} />}
           {status === "saving" ? "Saving…" : id ? "Save changes" : "Create property"}
         </Button>
         <button type="button" onClick={() => router.push("/admin/properties")} className="px-6 text-xs uppercase tracking-[0.18em] text-sand-600 hover:text-sand-900">

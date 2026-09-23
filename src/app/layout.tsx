@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { SiteFrame } from "@/components/layout/SiteFrame";
 import { Providers } from "./providers";
+import { NavigationProgressBar } from "@/components/shared/NavigationProgressBar";
 import { CONTACT } from "@/lib/contact";
 
 const serif = Cormorant_Garamond({
@@ -97,6 +98,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
         />
         <Providers>
+          <NavigationProgressBar />
           <SiteFrame>{children}</SiteFrame>
         </Providers>
       </body>

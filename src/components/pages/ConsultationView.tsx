@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Container } from "@/components/shared/Container";
 import { Input, Textarea, Select, Label } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/shared/Spinner";
 import { useLang } from "@/lib/i18n";
 
 type Status = "idle" | "loading" | "sent" | "error";
@@ -88,7 +89,8 @@ export function ConsultationView() {
               <Textarea id="message" name="message" maxLength={2000} className="min-h-24" />
             </div>
             {error && <p className="text-sm text-red-700 dark:text-red-400">{error}</p>}
-            <Button type="submit" disabled={status === "loading"} className="mt-2">
+            <Button type="submit" disabled={status === "loading"} className="mt-2 gap-2">
+              {status === "loading" && <Spinner size={15} />}
               {status === "loading" ? t("consult.sending") : t("consult.submit")}
             </Button>
           </form>

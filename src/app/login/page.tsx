@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Container } from "@/components/shared/Container";
 import { Input, Label } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/shared/Spinner";
 
 function LoginInner() {
   const router = useRouter();
@@ -55,7 +56,8 @@ function LoginInner() {
           <Input id="password" name="password" type="password" required minLength={8} autoComplete="current-password" />
         </div>
         {error && <p className="text-sm text-red-700 dark:text-red-400">{error}</p>}
-        <Button type="submit" disabled={loading} className="mt-4">
+        <Button type="submit" disabled={loading} className="mt-4 gap-2">
+          {loading && <Spinner size={15} />}
           {loading ? "Signing in…" : "Sign In"}
         </Button>
       </form>

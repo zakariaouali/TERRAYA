@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Input, Textarea, Label } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/shared/Spinner";
 import { useLang } from "@/lib/i18n";
 
 export function InquiryForm({ propertyId }: { propertyId?: string }) {
@@ -70,7 +71,8 @@ export function InquiryForm({ propertyId }: { propertyId?: string }) {
         <Textarea id="message" name="message" required minLength={10} maxLength={2000} />
       </div>
       {error && <p className="text-sm text-red-700 dark:text-red-400">{error}</p>}
-      <Button type="submit" disabled={status === "loading"} className="mt-4">
+      <Button type="submit" disabled={status === "loading"} className="mt-4 gap-2">
+        {status === "loading" && <Spinner size={15} />}
         {status === "loading" ? t("form.sending") : t("form.submit")}
       </Button>
       <p className="text-xs text-sand-600 dark:text-sand-400">

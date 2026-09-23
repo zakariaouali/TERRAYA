@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Container } from "@/components/shared/Container";
 import { Input, Label, Select } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/shared/Spinner";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 import { whatsappHref, whatsappMessageForPath } from "@/lib/contact";
 import { useLang } from "@/lib/i18n";
@@ -102,7 +103,8 @@ export function SellView() {
               )}
             </div>
             {error && <p className="text-sm text-red-700 dark:text-red-400">{error}</p>}
-            <Button type="submit" disabled={status === "loading"} className="mt-2">
+            <Button type="submit" disabled={status === "loading"} className="mt-2 gap-2">
+              {status === "loading" && <Spinner size={15} />}
               {status === "loading" ? t("sell.sending") : t("sell.submit")}
             </Button>
           </form>

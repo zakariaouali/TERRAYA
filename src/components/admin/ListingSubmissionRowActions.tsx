@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Spinner } from "@/components/shared/Spinner";
 
 // CONVERTED is intentionally excluded: it is set exclusively by the
 // conversion flow's own PATCH call (which also sets convertedPropertyId),
@@ -38,6 +39,7 @@ export function ListingSubmissionRowActions({ id, status }: { id: string; status
           <option key={s} value={s}>{s}</option>
         ))}
       </select>
+      {busy && <Spinner size={14} className="text-sand-600" />}
       {status !== "CONVERTED" && (
         <Link href={`/admin/properties/new?fromSubmission=${id}`} className="text-sand-900 hover:underline">
           Convert
