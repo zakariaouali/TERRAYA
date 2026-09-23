@@ -42,7 +42,7 @@ export default function TermsPage() {
         {
           heading: "Governing law",
           body: [
-            "These terms are governed by French law, and the courts of Paris have exclusive jurisdiction, save where mandatory consumer protections provide otherwise.",
+            "These terms are governed by the laws of the Kingdom of Morocco, and the courts of Marrakech have exclusive jurisdiction, save where mandatory consumer protections provide otherwise.",
           ],
         },
       ]}
