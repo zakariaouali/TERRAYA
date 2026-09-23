@@ -59,6 +59,9 @@ export default async function PropertyDetailPage({
       addressLocality: p.city,
       addressCountry: p.country,
     },
+    ...(p.latitude && p.longitude && {
+      geo: { "@type": "GeoCoordinates", latitude: p.latitude, longitude: p.longitude },
+    }),
     ...(p.listingType === "SALE" && {
       offers: { "@type": "Offer", price: p.priceEur, priceCurrency: "EUR", availability: "https://schema.org/InStock" },
     }),

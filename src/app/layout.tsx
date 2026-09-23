@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 import { SiteFrame } from "@/components/layout/SiteFrame";
 import { Providers } from "./providers";
+import { CONTACT } from "@/lib/contact";
 
 const serif = Cormorant_Garamond({
   subsets: ["latin"],
@@ -43,8 +44,9 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "TERRAYA",
     url: siteUrl,
+    images: [{ url: "/hero.jpg", width: 1537, height: 1023, alt: "A TERRAYA villa overlooking the Marrakech valley" }],
   },
-  twitter: { card: "summary_large_image", title: "TERRAYA" },
+  twitter: { card: "summary_large_image", title: "TERRAYA", images: ["/hero.jpg"] },
   robots: { index: true, follow: true },
 };
 
@@ -61,9 +63,28 @@ const orgJsonLd = {
   description:
     "A private real estate house curating exceptional properties, residences and investment opportunities for an international clientele.",
   url: siteUrl,
+  image: `${siteUrl}/hero.jpg`,
   email: "private@terraya.com",
+  telephone: CONTACT.phone,
   areaServed: { "@type": "City", name: "Marrakech" },
-  address: { "@type": "PostalAddress", addressLocality: "Marrakech", addressCountry: "MA" },
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: CONTACT.addressLines[0],
+    addressLocality: "Marrakech",
+    postalCode: "40000",
+    addressCountry: "MA",
+  },
+  geo: { "@type": "GeoCoordinates", latitude: CONTACT.lat, longitude: CONTACT.lng },
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    opens: "09:00",
+    closes: "18:00",
+  },
+  sameAs: [
+    "https://www.instagram.com/estate.terraya",
+    "https://snapchat.com/t/xB4yqcPM",
+  ],
   slogan: "Exceptional Properties. Timeless Value.",
 };
 
