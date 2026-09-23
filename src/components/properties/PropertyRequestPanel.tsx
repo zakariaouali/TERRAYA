@@ -175,11 +175,11 @@ export function PropertyRequestPanel({
                         {active && (
                           <motion.span
                             layoutId="request-intent-bg"
-                            className="absolute inset-0 -z-10 bg-sand-900 dark:bg-sand-100"
+                            className="absolute inset-0 bg-sand-900 dark:bg-sand-100"
                             transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                           />
                         )}
-                        <span className={cn("relative text-sm", active ? "text-sand-50 dark:text-sand-900" : "text-sand-900 dark:text-sand-100")}>
+                        <span className={cn("relative z-10 text-sm", active ? "text-sand-50 dark:text-sand-900" : "text-sand-900 dark:text-sand-100")}>
                           {lt === "SALE" ? "Buy" : "Rent"}
                         </span>
                       </button>

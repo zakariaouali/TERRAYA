@@ -68,11 +68,11 @@ export function PropertyFilters() {
               {active && (
                 <motion.span
                   layoutId="listing-type-bg"
-                  className="absolute inset-0 -z-10 bg-sand-900 dark:bg-sand-100"
+                  className="absolute inset-0 bg-sand-900 dark:bg-sand-100"
                   transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                 />
               )}
-              <span className="relative">{lt.label}</span>
+              <span className="relative z-10">{lt.label}</span>
             </button>
           );
         })}
