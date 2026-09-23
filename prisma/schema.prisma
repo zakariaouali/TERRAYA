@@ -113,6 +113,25 @@ model ConsultationRequest {
   @@index([createdAt])
 }
 
+model PropertyRequest {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @db.VarChar(255)
+  phone        String?
+  listingType  String // SALE | RENT
+  propertyType String? // VILLA | ESTATE | PENTHOUSE | RESIDENCE | RIAD | LAND — blank if undecided
+  city         String?
+  bedrooms     Int?
+  minBudget    BigInt?
+  maxBudget    BigInt?
+  notes        String?  @db.Text
+  status       String   @default("NEW") // NEW | CONTACTED | CLOSED
+  ip           String?
+  createdAt    DateTime @default(now())
+
+  @@index([status, createdAt])
+}
+
 model ListingSubmission {
   id                  String   @id @default(cuid())
   name                String

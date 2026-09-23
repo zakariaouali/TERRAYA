@@ -4,9 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { Menu, X, ChevronDown, Sun, Moon, Heart, Instagram, Facebook } from "lucide-react";
+import { Menu, X, Heart, Instagram, Facebook } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { Wordmark } from "@/components/shared/Wordmark";
+import { AnimatedChevron, AnimatedThemeIcon, AnimatedHeart } from "@/components/shared/AnimatedIcon";
 import { useLang, type Lang } from "@/lib/i18n";
 import { useFavorites } from "@/lib/favorites";
 import { useCurrency, CURRENCIES } from "@/lib/currency";
@@ -40,7 +41,8 @@ function SavedLink({ onDark, onClick }: { onDark: boolean; onClick?: () => void 
       aria-label="Saved properties"
       className={cn("group relative inline-flex items-center", controlBase, controlColor(onDark))}
     >
-      <Heart
+      <AnimatedHeart
+        active={count > 0}
         size={16}
         className={cn(
           count > 0 && !onDark && "fill-sand-700 text-sand-700 dark:fill-sand-300 dark:text-sand-300",
@@ -73,7 +75,7 @@ function ThemeToggle({ onDark }: { onDark: boolean }) {
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className={cn(controlBase, controlColor(onDark))}
     >
-      {isDark ? <Sun size={16} /> : <Moon size={16} />}
+      <AnimatedThemeIcon isDark={isDark} size={16} />
     </button>
   );
 }
@@ -96,7 +98,7 @@ function CurrencySwitcher({ onDark, compact = false }: { onDark: boolean; compac
           controlColor(onDark)
         )}
       >
-        {currency} <ChevronDown size={12} className={cn("mt-px transition-transform", open && "rotate-180")} />
+        {currency} <AnimatedChevron open={open} size={12} className="mt-px" />
       </button>
       {open && (
         <ul
@@ -148,7 +150,7 @@ function LangSwitcher({ onDark, compact = false }: { onDark: boolean; compact?: 
           controlColor(onDark)
         )}
       >
-        {lang} <ChevronDown size={12} className={cn("mt-px transition-transform", open && "rotate-180")} />
+        {lang} <AnimatedChevron open={open} size={12} className="mt-px" />
       </button>
       {open && (
         <ul

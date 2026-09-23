@@ -302,8 +302,46 @@ async function main() {
     listingCodes.every((c) => c === 400)
   );
 
+  // 8. Property-request pipeline ("can't find what you want" buyer brief).
+  const requestRes = await fetch(BASE + "/api/property-requests", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      name: "Smoke Buyer",
+      email: `buyer-smoke-${Date.now()}@test.local`,
+      listingType: "RENT",
+      propertyType: "RIAD",
+      city: "Gueliz",
+      bedrooms: 3,
+      minBudget: 2000,
+      maxBudget: 4000,
+      notes: "Smoke test brief.",
+    }),
+  });
+  const requestBody = await requestRes.json().catch(() => ({}));
+  check("property request succeeds", requestRes.status === 201 && !!requestBody.data?.id);
+
+  const badRequestRes = await fetch(BASE + "/api/property-requests", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ name: "Smoke Buyer", email: "not-an-email", listingType: "RENT" }),
+  });
+  check("property request with invalid email is rejected", badRequestRes.status === 400);
+
+  const anonRequestsGet = await fetch(BASE + "/api/property-requests");
+  check("anonymous GET on property-requests is rejected", anonRequestsGet.status === 401);
+
+  const staffRequestsGet = await fetch(BASE + "/api/property-requests", { headers: { cookie } });
+  const staffRequestsGetBody = await staffRequestsGet.json().catch(() => ({}));
+  const foundRequest = staffRequestsGetBody.data?.find((r) => r.id === requestBody.data?.id);
+  check(
+    "staff GET on property-requests returns the just-created brief",
+    staffRequestsGet.status === 200 && !!foundRequest
+  );
+
   const prisma2 = new PrismaClient();
   await prisma2.listingSubmission.deleteMany({ where: { name: { in: ["Smoke Seller", "Smoke RL"] } } });
+  await prisma2.propertyRequest.deleteMany({ where: { name: "Smoke Buyer" } });
   await prisma2.$disconnect();
 
   await Promise.all(

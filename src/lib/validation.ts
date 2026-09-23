@@ -27,6 +27,19 @@ export const consultationSchema = z.object({
   message: z.string().max(2000).optional(),
 });
 
+export const propertyRequestSchema = z.object({
+  name: z.string().min(2).max(120),
+  email: z.string().email().max(255),
+  phone: z.string().max(40).optional(),
+  listingType: z.enum(["SALE", "RENT"]),
+  propertyType: z.enum(["VILLA", "ESTATE", "PENTHOUSE", "RESIDENCE", "RIAD", "LAND"]).optional(),
+  city: z.string().max(120).optional(),
+  bedrooms: z.coerce.number().int().min(0).max(50).optional(),
+  minBudget: z.coerce.number().int().nonnegative().optional(),
+  maxBudget: z.coerce.number().int().nonnegative().optional(),
+  notes: z.string().max(2000).optional(),
+});
+
 export const listingSubmissionSchema = z.object({
   name: z.string().min(2).max(120),
   phone: z.string().min(4).max(40),
@@ -72,5 +85,6 @@ export const propertyUpsertSchema = z.object({
 export type LoginInput = z.infer<typeof loginSchema>;
 export type InquiryInput = z.infer<typeof inquirySchema>;
 export type NewsletterInput = z.infer<typeof newsletterSchema>;
+export type PropertyRequestInput = z.infer<typeof propertyRequestSchema>;
 export type PropertyInput = z.infer<typeof propertyUpsertSchema>;
 export type ListingSubmissionInput = z.infer<typeof listingSubmissionSchema>;

@@ -238,7 +238,7 @@ const en: Dict = {
   "form.privacy": "Your information is handled in strict confidence and never shared.",
   // Footer
   "footer.desc":
-    "TERRAYA curates a discreet portfolio of exceptional properties and investment opportunities for a private international clientele.",
+    "TERRAYA curates a discreet portfolio of exceptional properties for a private international clientele.",
   "footer.col.explore": "Explore",
   "footer.col.maison": "Maison",
   "footer.col.private": "Private",
@@ -487,7 +487,7 @@ const fr: Dict = {
   "form.privacy": "Vos informations sont traitées en stricte confidentialité et ne sont jamais partagées.",
   // Footer
   "footer.desc":
-    "TERRAYA compose un portefeuille discret de biens d'exception et d'opportunités d'investissement pour une clientèle internationale privée.",
+    "TERRAYA compose un portefeuille discret de biens d'exception pour une clientèle internationale privée.",
   "footer.col.explore": "Explorer",
   "footer.col.maison": "Maison",
   "footer.col.private": "Privé",

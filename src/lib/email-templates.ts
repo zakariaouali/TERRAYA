@@ -97,6 +97,54 @@ export function consultationOwnerEmail(data: {
   };
 }
 
+export function propertyRequestClientEmail(data: { name: string }): { subject: string; html: string } {
+  return {
+    subject: "We're on it — TERRAYA",
+    html: wrap(
+      "We're on it.",
+      `<p style="font-size: 15px; line-height: 1.6;">Dear ${escapeHtml(data.name)},</p>
+       <p style="font-size: 15px; line-height: 1.6;">Thank you for telling us exactly what you're looking for. Our office will search our full portfolio — including properties not yet listed publicly — and a member of our team will contact you personally within one business day.</p>
+       <p style="font-size: 15px; line-height: 1.6;">If it's more convenient, you're welcome to reach us directly on WhatsApp at +212 694-838739.</p>`
+    ),
+  };
+}
+
+function formatEur(n?: number | null): string | undefined {
+  if (n == null) return undefined;
+  return `€${n.toLocaleString("en-US")}`;
+}
+
+export function propertyRequestOwnerEmail(data: {
+  name: string;
+  email: string;
+  phone?: string | null;
+  listingType: string;
+  propertyType?: string | null;
+  city?: string | null;
+  bedrooms?: number | null;
+  minBudget?: number | null;
+  maxBudget?: number | null;
+  notes?: string | null;
+}): { subject: string; html: string } {
+  const budget = [formatEur(data.minBudget), formatEur(data.maxBudget)].filter(Boolean).join(" – ");
+  return {
+    subject: `New property request — ${data.name}`,
+    html: wrap(
+      "A client couldn't find what they wanted.",
+      `${row("Name", data.name)}
+       ${row("Email", data.email)}
+       ${row("Phone", data.phone)}
+       ${row("Looking to", data.listingType === "RENT" ? "Rent" : "Buy")}
+       ${row("Property type", data.propertyType)}
+       ${row("Preferred area", data.city)}
+       ${row("Bedrooms", data.bedrooms != null ? `${data.bedrooms}+` : undefined)}
+       ${row("Budget", budget || undefined)}
+       ${data.notes ? `<p style="margin: 16px 0 4px; font-size: 14px;"><strong>Notes:</strong></p><p style="font-size: 14px; line-height: 1.6;">${escapeHtml(data.notes)}</p>` : ""}
+       <p style="margin: 16px 0 0; font-size: 13px; color: #55493d;">Review it in /admin/requests.</p>`
+    ),
+  };
+}
+
 export function sellerClientEmail(data: { name: string }): { subject: string; html: string } {
   return {
     subject: "We've received your property submission — TERRAYA",

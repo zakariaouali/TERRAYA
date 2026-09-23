@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LayoutDashboard, Building2, Inbox, Users, LogOut } from "lucide-react";
+import { LayoutDashboard, Building2, Inbox, Users, Search, LogOut } from "lucide-react";
 import { Wordmark } from "@/components/shared/Wordmark";
 
 export function AdminShell({
@@ -17,6 +17,7 @@ export function AdminShell({
           <NavLink href="/admin" icon={<LayoutDashboard size={16} />} label="Dashboard" />
           <NavLink href="/admin/properties" icon={<Building2 size={16} />} label="Properties" />
           <NavLink href="/admin/inquiries" icon={<Inbox size={16} />} label="Inquiries" />
+          <NavLink href="/admin/requests" icon={<Search size={16} />} label="Requests" />
           <NavLink href="/admin/listings" icon={<Users size={16} />} label="Listings" />
         </nav>
         <div className="mt-auto pt-8 border-t border-sand-200">

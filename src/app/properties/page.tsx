@@ -52,9 +52,10 @@ export default async function PropertiesPage({
     if (type && p.type !== type) return false;
     if (listingType && p.listingType !== listingType) return false;
     if (bedrooms && p.bedrooms < bedrooms) return false;
-    if (listingType === "SALE" || !listingType) {
-      if (p.priceEur < min || p.priceEur > max) return false;
-    }
+    // Sale prices run into the millions, rent runs monthly in the
+    // thousands — the price filter only ever shows once a listing type is
+    // picked (see PropertyFilters), so it only ever applies to that type.
+    if (listingType && (p.priceEur < min || p.priceEur > max)) return false;
     return true;
   });
 
@@ -87,7 +88,7 @@ export default async function PropertiesPage({
           ))}
           {filtered.length === 0 && (
             <p className="col-span-full text-sand-700 dark:text-sand-300 italic font-display text-2xl py-16 text-center">
-              No properties match your criteria. Please refine your search.
+              Nothing in the collection matches yet — tell us what you need above, and we&apos;ll find it for you.
             </p>
           )}
         </div>

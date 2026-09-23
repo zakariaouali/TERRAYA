@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart } from "lucide-react";
+import { AnimatedHeart } from "@/components/shared/AnimatedIcon";
 import { useFavorites } from "@/lib/favorites";
 import { cn } from "@/lib/utils";
 
@@ -23,7 +23,7 @@ export function FavoriteButton({ slug, className }: { slug: string; className?: 
         className
       )}
     >
-      <Heart size={16} className={cn("transition-colors", active ? "fill-sand-700 text-sand-700" : "text-sand-800")} />
+      <AnimatedHeart active={active} size={16} className={active ? "fill-sand-700 text-sand-700" : "text-sand-800"} />
     </button>
   );
 }
