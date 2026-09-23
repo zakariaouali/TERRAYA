@@ -20,9 +20,11 @@ export default async function NewPropertyPage({
   const { fromSubmission } = await searchParams;
 
   let initial: Partial<PropertyFormData> | undefined;
+  let submissionFound = false;
   if (fromSubmission) {
     const submission = await prisma.listingSubmission.findUnique({ where: { id: fromSubmission } });
     if (submission) {
+      submissionFound = true;
       initial = {
         title: `${submission.propertyType} — submitted by ${submission.name}`,
         type: submission.propertyType,
@@ -38,7 +40,7 @@ export default async function NewPropertyPage({
       <p className="eyebrow">Portfolio</p>
       <h1 className="font-display text-5xl text-sand-900 mt-3">New property.</h1>
       <div className="mt-10">
-        <PropertyForm initial={initial} fromSubmissionId={fromSubmission} />
+        <PropertyForm initial={initial} fromSubmissionId={submissionFound ? fromSubmission : undefined} />
       </div>
     </div>
   );

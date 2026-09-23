@@ -4,7 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const STATUSES = ["NEW", "CONTACTED", "CONVERTED", "DECLINED"] as const;
+// CONVERTED is intentionally excluded: it is set exclusively by the
+// conversion flow's own PATCH call (which also sets convertedPropertyId),
+// never picked manually — otherwise a misclick would permanently hide this
+// row's Convert link and disable the select with no way back.
+const STATUSES = ["NEW", "CONTACTED", "DECLINED"] as const;
 
 export function ListingSubmissionRowActions({ id, status }: { id: string; status: string }) {
   const router = useRouter();

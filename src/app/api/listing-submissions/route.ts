@@ -35,6 +35,16 @@ export async function POST(req: NextRequest) {
     return fail("Submissions are temporarily unavailable. Please contact us directly on WhatsApp instead.", 503);
   }
 
+  // Best-effort early rejection of oversized requests before we parse the
+  // multipart body. Content-Length isn't always sent, so a missing header
+  // just skips this check — the per-file size check below still catches
+  // oversized individual files either way.
+  const MAX_REQUEST_BYTES = MAX_PHOTOS * MAX_BYTES + 1024 * 1024; // +1MB slack for fields/boundaries
+  const contentLength = req.headers.get("content-length");
+  if (contentLength && Number(contentLength) > MAX_REQUEST_BYTES) {
+    return fail("Submission is too large.", 400);
+  }
+
   let form: FormData;
   try {
     form = await req.formData();

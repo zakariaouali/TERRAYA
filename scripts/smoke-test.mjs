@@ -3,6 +3,11 @@
 // MySQL database, and the admin credentials from .env available as
 // ADMIN_EMAIL / ADMIN_PASSWORD environment variables.
 import { PrismaClient } from "../node_modules/@prisma/client/index.js";
+import { unlink } from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const BASE = process.env.SMOKE_BASE_URL || "http://localhost:4321";
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
@@ -154,6 +159,8 @@ async function main() {
   await prisma.$disconnect();
 
   // 7. Seller listing-submission pipeline.
+  const uploadedFilePaths = [];
+
   const submissionForm = new FormData();
   submissionForm.append("name", "Smoke Seller");
   submissionForm.append("phone", "+212600000000");
@@ -186,6 +193,25 @@ async function main() {
   });
   check("anonymous PATCH on listing-submissions is rejected", anonListingsPatch.status === 401);
 
+  // 7b. Staff GET readback: the row must be queryable immediately after creation.
+  const staffListingsGet = await fetch(BASE + "/api/listing-submissions", { headers: { cookie } });
+  const staffListingsGetBody = await staffListingsGet.json().catch(() => ({}));
+  const foundSubmission = staffListingsGetBody.data?.find((s) => s.id === submissionBody.data?.id);
+  check(
+    "staff GET on listing-submissions returns the just-created row",
+    staffListingsGet.status === 200 && !!foundSubmission
+  );
+  if (foundSubmission) {
+    try {
+      const imgs = JSON.parse(foundSubmission.images);
+      if (Array.isArray(imgs)) {
+        for (const url of imgs) uploadedFilePaths.push(path.join(__dirname, "..", "public", url));
+      }
+    } catch {
+      // ignore parse issues; nothing to clean up for this row then
+    }
+  }
+
   const staffListingsPatch = await fetch(BASE + "/api/listing-submissions/" + submissionBody.data?.id, {
     method: "PATCH",
     headers: { "content-type": "application/json", cookie },
@@ -193,9 +219,100 @@ async function main() {
   });
   check("staff PATCH on listing-submissions succeeds", staffListingsPatch.status === 200);
 
+  // 7c. Staff PATCH also accepts the CONVERTED + convertedPropertyId body shape
+  // (a separate submission, since a row can only sensibly be tested for one
+  // terminal-ish PATCH outcome). No real Property row is needed — this only
+  // confirms the route accepts and stores that specific body shape.
+  const convertSubmissionForm = new FormData();
+  convertSubmissionForm.append("name", "Smoke Seller");
+  convertSubmissionForm.append("phone", "+212600000000");
+  convertSubmissionForm.append("email", `seller-smoke-convert-${Date.now()}@test.local`);
+  convertSubmissionForm.append("propertyType", "VILLA");
+  convertSubmissionForm.append("city", "Gueliz");
+  const realPngForConvertSubmission = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0]);
+  convertSubmissionForm.append("photos", new Blob([realPngForConvertSubmission], { type: "image/png" }), "photo.png");
+  const convertSubmissionRes = await fetch(BASE + "/api/listing-submissions", { method: "POST", body: convertSubmissionForm });
+  const convertSubmissionBody = await convertSubmissionRes.json().catch(() => ({}));
+  check(
+    "second listing submission (for CONVERTED test) succeeds",
+    convertSubmissionRes.status === 201 && !!convertSubmissionBody.data?.id
+  );
+
+  const convertSubmissionGet = await fetch(BASE + "/api/listing-submissions", { headers: { cookie } });
+  const convertSubmissionGetBody = await convertSubmissionGet.json().catch(() => ({}));
+  const foundConvertSubmission = convertSubmissionGetBody.data?.find((s) => s.id === convertSubmissionBody.data?.id);
+  if (foundConvertSubmission) {
+    try {
+      const imgs = JSON.parse(foundConvertSubmission.images);
+      if (Array.isArray(imgs)) {
+        for (const url of imgs) uploadedFilePaths.push(path.join(__dirname, "..", "public", url));
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  const staffConvertPatch = await fetch(BASE + "/api/listing-submissions/" + convertSubmissionBody.data?.id, {
+    method: "PATCH",
+    headers: { "content-type": "application/json", cookie },
+    body: JSON.stringify({ status: "CONVERTED", convertedPropertyId: "smoke-fake-property-id-000000" }),
+  });
+  check("staff PATCH with CONVERTED + convertedPropertyId body is accepted", staffConvertPatch.status === 200);
+
+  // 7d. Rate-limit fix on listing-submissions POST: same last-hop is limited,
+  // different last-hop is not (same idiom as the login rate-limit check above).
+  let listingCodes = [];
+  for (let i = 0; i < 8; i++) {
+    const rlForm = new FormData();
+    rlForm.append("name", "Smoke RL");
+    rlForm.append("phone", "+212600000000");
+    rlForm.append("email", `seller-smoke-rl-${Date.now()}-${i}@test.local`);
+    rlForm.append("propertyType", "VILLA");
+    rlForm.append("city", "Gueliz");
+    rlForm.append("photos", new Blob(["not an image"], { type: "image/jpeg" }), "fake.jpg");
+    const r = await fetch(BASE + "/api/listing-submissions", {
+      method: "POST",
+      headers: { "x-forwarded-for": `1.2.3.${i}, 9.9.9.9` },
+      body: rlForm,
+    });
+    listingCodes.push(r.status);
+  }
+  check("listing-submissions: same real last-hop gets rate-limited after 5", listingCodes.filter((c) => c === 429).length >= 3);
+
+  listingCodes = [];
+  for (let i = 0; i < 8; i++) {
+    const rlForm = new FormData();
+    rlForm.append("name", "Smoke RL");
+    rlForm.append("phone", "+212600000000");
+    rlForm.append("email", `seller-smoke-rl2-${Date.now()}-${i}@test.local`);
+    rlForm.append("propertyType", "VILLA");
+    rlForm.append("city", "Gueliz");
+    rlForm.append("photos", new Blob(["not an image"], { type: "image/jpeg" }), "fake.jpg");
+    const r = await fetch(BASE + "/api/listing-submissions", {
+      method: "POST",
+      headers: { "x-forwarded-for": `1.2.3.4, 8.8.8.${i}` },
+      body: rlForm,
+    });
+    listingCodes.push(r.status);
+  }
+  check(
+    "listing-submissions: different real last-hop each time is never rate-limited",
+    listingCodes.every((c) => c === 400)
+  );
+
   const prisma2 = new PrismaClient();
-  await prisma2.listingSubmission.deleteMany({ where: { name: "Smoke Seller" } });
+  await prisma2.listingSubmission.deleteMany({ where: { name: { in: ["Smoke Seller", "Smoke RL"] } } });
   await prisma2.$disconnect();
+
+  await Promise.all(
+    uploadedFilePaths.map(async (p) => {
+      try {
+        await unlink(p);
+      } catch {
+        // best-effort cleanup
+      }
+    })
+  );
 
   console.log(`\n${failures === 0 ? "ALL PASS" : `${failures} FAILURE(S)`}`);
   process.exit(failures === 0 ? 0 : 1);

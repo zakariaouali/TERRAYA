@@ -119,12 +119,21 @@ export function PropertyForm({ initial, id, fromSubmissionId }: { initial?: Part
     });
     const json = await res.json().catch(() => ({}));
     if (res.ok && json.success) {
-      if (!id && fromSubmissionId) {
-        await fetch(`/api/listing-submissions/${fromSubmissionId}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status: "CONVERTED", convertedPropertyId: json.data.id }),
-        }).catch(() => {});
+      if (!id && fromSubmissionId && json.data?.id) {
+        let conversionOk = false;
+        try {
+          const convertRes = await fetch(`/api/listing-submissions/${fromSubmissionId}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: "CONVERTED", convertedPropertyId: json.data.id }),
+          });
+          conversionOk = convertRes.ok;
+        } catch {
+          conversionOk = false;
+        }
+        if (!conversionOk) {
+          alert("Property was created, but the submission could not be marked as converted automatically. Please update it manually in /admin/listings.");
+        }
       }
       router.push("/admin/properties");
       router.refresh();
