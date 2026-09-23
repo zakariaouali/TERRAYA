@@ -166,6 +166,7 @@ async function main() {
   submissionForm.append("phone", "+212600000000");
   submissionForm.append("email", `seller-smoke-${Date.now()}@test.local`);
   submissionForm.append("propertyType", "VILLA");
+  submissionForm.append("listingType", "SALE");
   submissionForm.append("city", "Gueliz");
   const realPngForSubmission = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0]);
   submissionForm.append("photos", new Blob([realPngForSubmission], { type: "image/png" }), "photo.png");
@@ -228,6 +229,7 @@ async function main() {
   convertSubmissionForm.append("phone", "+212600000000");
   convertSubmissionForm.append("email", `seller-smoke-convert-${Date.now()}@test.local`);
   convertSubmissionForm.append("propertyType", "VILLA");
+  convertSubmissionForm.append("listingType", "RENT");
   convertSubmissionForm.append("city", "Gueliz");
   const realPngForConvertSubmission = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0]);
   convertSubmissionForm.append("photos", new Blob([realPngForConvertSubmission], { type: "image/png" }), "photo.png");

@@ -14,7 +14,7 @@ import { CONTACT } from "@/lib/contact";
 import { cn } from "@/lib/utils";
 
 // Routes whose top section is a full-bleed dark hero — the header floats white over them.
-const DARK_HERO_ROUTES = ["/", "/about", "/services", "/investment", "/insights"];
+const DARK_HERO_ROUTES = ["/", "/about", "/services", "/insights"];
 
 function SnapchatIcon({ size = 13 }: { size?: number }) {
   return (
@@ -56,7 +56,6 @@ const links = [
   { href: "/properties", key: "nav.properties" },
   { href: "/about", key: "nav.about" },
   { href: "/services", key: "nav.services" },
-  { href: "/investment", key: "nav.invest" },
   { href: "/contact", key: "nav.contact" },
   { href: "/list-your-property", key: "nav.sell" },
 ];

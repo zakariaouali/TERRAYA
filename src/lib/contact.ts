@@ -21,7 +21,6 @@ export function whatsappHref(message?: string) {
 const ROUTE_MESSAGES: { prefix: string; message: string }[] = [
   { prefix: "/properties", message: "Hello TERRAYA, I have a question about your properties." },
   { prefix: "/list-your-property", message: "Hello TERRAYA, I'd like to list my property." },
-  { prefix: "/investment", message: "Hello TERRAYA, I'd like to know more about your investment advisory." },
   { prefix: "/services", message: "Hello TERRAYA, I'd like to know more about your services." },
   { prefix: "/about", message: "Hello TERRAYA, I'd like to know more about your agency." },
   { prefix: "/consultation", message: "Hello TERRAYA, I'd like to arrange a private consultation." },

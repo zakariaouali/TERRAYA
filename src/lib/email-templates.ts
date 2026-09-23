@@ -114,6 +114,7 @@ export function sellerOwnerEmail(data: {
   phone: string;
   email: string;
   propertyType: string;
+  listingType: string;
   city: string;
 }): { subject: string; html: string } {
   return {
@@ -124,6 +125,7 @@ export function sellerOwnerEmail(data: {
        ${row("Phone", data.phone)}
        ${row("Email", data.email)}
        ${row("Property type", data.propertyType)}
+       ${row("Listing type", data.listingType === "RENT" ? "For Rent" : "For Sale")}
        ${row("City", data.city)}
        <p style="margin: 16px 0 0; font-size: 13px; color: #55493d;">Review it and its photos in /admin/listings.</p>`
     ),

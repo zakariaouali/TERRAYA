@@ -28,6 +28,7 @@ export default async function NewPropertyPage({
       initial = {
         title: `${submission.propertyType} — submitted by ${submission.name}`,
         type: submission.propertyType,
+        listingType: submission.listingType,
         city: submission.city,
         country: "Morocco",
         images: parseArr(submission.images),

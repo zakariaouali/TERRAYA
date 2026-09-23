@@ -29,19 +29,18 @@ export const metadata: Metadata = {
     template: "%s · TERRAYA",
   },
   description:
-    "TERRAYA is a private real estate house curating exceptional properties, residences and investment opportunities for an international clientele.",
+    "TERRAYA is a private real estate house curating exceptional properties and residences for an international clientele.",
   keywords: [
     "luxury real estate Marrakech",
     "Marrakech villas for sale",
     "Marrakech riad for sale",
     "long-term villa rental Marrakech",
     "private estates Marrakech",
-    "investment properties Marrakech",
   ],
   openGraph: {
     title: "TERRAYA — Exceptional Properties. Timeless Value.",
     description:
-      "A private real estate maison curating exceptional properties and investment opportunities.",
+      "A private real estate maison curating exceptional properties for sale and long-term rental.",
     type: "website",
     siteName: "TERRAYA",
     url: siteUrl,
@@ -62,7 +61,7 @@ const orgJsonLd = {
   "@type": "RealEstateAgent",
   name: "TERRAYA",
   description:
-    "A private real estate house curating exceptional properties, residences and investment opportunities for an international clientele.",
+    "A private real estate house curating exceptional properties and residences for an international clientele.",
   url: siteUrl,
   image: `${siteUrl}/hero.jpg`,
   email: "private@terraya.com",

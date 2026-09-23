@@ -32,6 +32,7 @@ export const listingSubmissionSchema = z.object({
   phone: z.string().min(4).max(40),
   email: z.string().email().max(255),
   propertyType: z.enum(["VILLA", "ESTATE", "PENTHOUSE", "RESIDENCE", "RIAD", "LAND"]),
+  listingType: z.enum(["SALE", "RENT"]),
   city: z.string().min(2).max(120),
 });
 

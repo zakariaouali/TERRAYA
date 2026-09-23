@@ -119,6 +119,7 @@ model ListingSubmission {
   phone               String
   email               String   @db.VarChar(255)
   propertyType        String // VILLA | ESTATE | PENTHOUSE | RESIDENCE | RIAD | LAND
+  listingType         String   @default("SALE") // SALE | RENT
   city                String
   images              String   @db.Text // JSON-encoded string[]
   status              String   @default("NEW") // NEW | CONTACTED | CONVERTED | DECLINED

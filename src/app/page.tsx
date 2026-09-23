@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Hero } from "@/components/home/Hero";
 import { PropertyCategories } from "@/components/home/PropertyCategories";
 import { FeaturedProperties } from "@/components/home/FeaturedProperties";
-import { InvestmentTeaser } from "@/components/home/InvestmentTeaser";
 import { Lifestyle } from "@/components/home/Lifestyle";
 import { Testimonials } from "@/components/home/Testimonials";
 import { MarketInsights } from "@/components/home/MarketInsights";
@@ -23,7 +22,6 @@ export default async function HomePage() {
       <Hero />
       <PropertyCategories />
       <FeaturedProperties properties={featured} />
-      <InvestmentTeaser />
       <Lifestyle />
       <Testimonials />
       <MarketInsights />

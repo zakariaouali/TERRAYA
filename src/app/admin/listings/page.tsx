@@ -54,7 +54,12 @@ export default async function AdminListingsPage() {
                   </td>
                   <td className="px-5 py-4 text-sand-900 font-medium">{s.name}</td>
                   <td className="px-5 py-4 text-sand-700">{s.phone} · {s.email}</td>
-                  <td className="px-5 py-4 text-sand-700">{s.propertyType}</td>
+                  <td className="px-5 py-4 text-sand-700">
+                    {s.propertyType}
+                    <span className="ml-2 text-[0.6rem] uppercase tracking-wider text-sand-500">
+                      {s.listingType === "RENT" ? "Rent" : "Sale"}
+                    </span>
+                  </td>
                   <td className="px-5 py-4 text-sand-700">{s.city}</td>
                   <td className="px-5 py-4 text-right"><ListingSubmissionRowActions id={s.id} status={s.status} /></td>
                 </tr>

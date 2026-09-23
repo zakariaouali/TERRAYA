@@ -57,6 +57,7 @@ export async function POST(req: NextRequest) {
     phone: form.get("phone"),
     email: form.get("email"),
     propertyType: form.get("propertyType"),
+    listingType: form.get("listingType"),
     city: form.get("city"),
   });
   if (!parsed.success) return fail("Please review the form and try again.");
@@ -105,6 +106,7 @@ export async function POST(req: NextRequest) {
         phone: data.phone,
         email,
         propertyType: data.propertyType,
+        listingType: data.listingType,
         city: data.city,
         images: JSON.stringify(urls),
         ip,
@@ -121,7 +123,7 @@ export async function POST(req: NextRequest) {
 
   const ownerEmail = process.env.ADMIN_EMAIL;
   if (ownerEmail) {
-    const owner = sellerOwnerEmail({ name: data.name, phone: data.phone, email, propertyType: data.propertyType, city: data.city });
+    const owner = sellerOwnerEmail({ name: data.name, phone: data.phone, email, propertyType: data.propertyType, listingType: data.listingType, city: data.city });
     await sendEmail({ to: ownerEmail, subject: owner.subject, html: owner.html });
   }
 
