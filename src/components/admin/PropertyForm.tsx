@@ -72,7 +72,7 @@ function ListEditor({ label, items, onChange, placeholder }: { label: string; it
   );
 }
 
-export function PropertyForm({ initial, id }: { initial?: Partial<PropertyFormData>; id?: string }) {
+export function PropertyForm({ initial, id, fromSubmissionId }: { initial?: Partial<PropertyFormData>; id?: string; fromSubmissionId?: string }) {
   const router = useRouter();
   const [data, setData] = useState<PropertyFormData>({ ...EMPTY, ...initial });
   const [status, setStatus] = useState<"idle" | "saving" | "error">("idle");
@@ -119,6 +119,13 @@ export function PropertyForm({ initial, id }: { initial?: Partial<PropertyFormDa
     });
     const json = await res.json().catch(() => ({}));
     if (res.ok && json.success) {
+      if (!id && fromSubmissionId) {
+        await fetch(`/api/listing-submissions/${fromSubmissionId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: "CONVERTED", convertedPropertyId: json.data.id }),
+        }).catch(() => {});
+      }
       router.push("/admin/properties");
       router.refresh();
     } else {
