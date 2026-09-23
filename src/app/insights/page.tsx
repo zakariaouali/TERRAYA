@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/shared/Container";
 import { PageHero } from "@/components/shared/PageHero";
 import { FadeIn } from "@/components/shared/FadeIn";
+import { FadeImage } from "@/components/shared/FadeImage";
 import { insights } from "@/data/insights";
 
 export const metadata: Metadata = {
@@ -32,7 +32,7 @@ export default function InsightsPage() {
               <FadeIn key={article.slug} delay={(i % 3) * 0.1}>
                 <Link href={`/insights/${article.slug}`} className="group block">
                   <div className="relative aspect-[5/4] overflow-hidden ">
-                    <Image
+                    <FadeImage
                       src={article.image}
                       alt={article.title}
                       fill

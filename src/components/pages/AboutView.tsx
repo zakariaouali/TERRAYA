@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { Container } from "@/components/shared/Container";
 import { PageHero } from "@/components/shared/PageHero";
 import { FadeIn } from "@/components/shared/FadeIn";
+import { FadeImage } from "@/components/shared/FadeImage";
 import { useLang } from "@/lib/i18n";
 
 const values = [
@@ -42,7 +42,7 @@ export function AboutView() {
           </FadeIn>
           <FadeIn delay={0.15}>
             <div className="relative aspect-[4/5] overflow-hidden">
-              <Image
+              <FadeImage
                 src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=1600&q=80"
                 alt=""
                 fill
@@ -82,7 +82,7 @@ export function AboutView() {
               <FadeIn key={member.name} delay={i * 0.08}>
                 <div>
                   <div className="relative aspect-[3/4] overflow-hidden">
-                    <Image src={member.img} alt={member.name} fill sizes="(min-width:768px) 33vw, 100vw" className="object-cover" />
+                    <FadeImage src={member.img} alt={member.name} fill sizes="(min-width:768px) 33vw, 100vw" className="object-cover" />
                   </div>
                   <p className="font-display text-2xl text-sand-900 dark:text-sand-100 mt-6">{member.name}</p>
                   <p className="eyebrow mt-2">{t(member.roleKey)}</p>

@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { FadeIn } from "@/components/shared/FadeIn";
+import { FadeImage } from "@/components/shared/FadeImage";
 import { useLang } from "@/lib/i18n";
 
 const tiles = [
@@ -33,7 +33,7 @@ export function Lifestyle() {
           {tiles.map((tile, i) => (
             <FadeIn key={tile.labelKey} delay={i * 0.08}>
               <div className="group relative aspect-[3/4] overflow-hidden">
-                <Image
+                <FadeImage
                   src={tile.image}
                   alt={t(tile.labelKey)}
                   fill

@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Phone, Mail } from "lucide-react";
 import type { SeedProperty } from "@/data/properties";
 import { Price } from "@/components/shared/Price";
+import { FadeImage } from "@/components/shared/FadeImage";
 import { FavoriteButton } from "@/components/properties/FavoriteButton";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 import { CONTACT, whatsappHref } from "@/lib/contact";
@@ -32,7 +32,7 @@ export function PropertyCard({ p }: { p: SeedProperty }) {
   return (
     <div className="group relative">
       <div className="relative aspect-[4/5] overflow-hidden bg-sand-200 dark:bg-sand-800">
-        <Image
+        <FadeImage
           src={p.heroImage}
           alt={p.title}
           fill

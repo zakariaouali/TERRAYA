@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import type { SeedProperty } from "@/data/properties";
 import { getAllProperties } from "@/lib/properties";
 import { Container } from "@/components/shared/Container";
+import { FadeImage } from "@/components/shared/FadeImage";
 import { Price } from "@/components/shared/Price";
 import { formatArea } from "@/lib/utils";
 
@@ -73,7 +73,7 @@ export default async function ComparePage({
                     <th key={p.slug} className="p-4 align-bottom">
                       <Link href={`/properties/${p.slug}`} className="group block">
                         <div className="relative aspect-[4/3] overflow-hidden ">
-                          <Image
+                          <FadeImage
                             src={p.heroImage}
                             alt={p.title}
                             fill

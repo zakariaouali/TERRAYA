@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/shared/Container";
+import { FadeImage } from "@/components/shared/FadeImage";
 import { insights, getInsight } from "@/data/insights";
 
 export function generateStaticParams() {
@@ -73,7 +73,7 @@ export default async function InsightDetailPage({
         </div>
 
         <div className="relative mx-auto mt-12 aspect-[16/9] max-w-5xl overflow-hidden ">
-          <Image src={article.image} alt={article.title} fill priority sizes="100vw" className="object-cover" />
+          <FadeImage src={article.image} alt={article.title} fill priority sizes="100vw" className="object-cover" />
         </div>
 
         <div className="mx-auto mt-16 max-w-2xl space-y-6">

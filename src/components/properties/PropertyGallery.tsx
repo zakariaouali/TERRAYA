@@ -3,13 +3,14 @@
 import Image from "next/image";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { FadeImage } from "@/components/shared/FadeImage";
 
 export function PropertyGallery({ images, title }: { images: string[]; title: string }) {
   const [active, setActive] = useState(0);
   return (
     <div className="grid gap-4">
       <div className="relative aspect-[16/10] overflow-hidden bg-sand-200 dark:bg-sand-800">
-        <Image
+        <FadeImage
           key={images[active]}
           src={images[active]}
           alt={`${title} — image ${active + 1}`}

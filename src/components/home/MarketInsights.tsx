@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/shared/Container";
 import { FadeIn } from "@/components/shared/FadeIn";
+import { FadeImage } from "@/components/shared/FadeImage";
 import { insights } from "@/data/insights";
 import { insightCardFr } from "@/data/content.fr";
 import { useLang } from "@/lib/i18n";
@@ -34,7 +34,7 @@ export function MarketInsights() {
             <FadeIn key={i.slug} delay={idx * 0.1}>
               <Link href={`/insights/${i.slug}`} className="group block">
                 <div className="relative aspect-[5/4] overflow-hidden ">
-                  <Image
+                  <FadeImage
                     src={i.image}
                     alt={fr?.title ?? i.title}
                     fill

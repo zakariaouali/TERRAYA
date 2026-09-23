@@ -1,15 +1,15 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/shared/Container";
+import { FadeImage } from "@/components/shared/FadeImage";
 import { useLang } from "@/lib/i18n";
 
 export function ContactCTA() {
   const { t } = useLang();
   return (
     <section className="relative py-32 lg:py-48 overflow-hidden">
-      <Image
+      <FadeImage
         src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=2400&q=80"
         alt=""
         fill

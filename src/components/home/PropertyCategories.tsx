@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { FadeIn } from "@/components/shared/FadeIn";
+import { FadeImage } from "@/components/shared/FadeImage";
 import { useLang } from "@/lib/i18n";
 
 /**
@@ -55,7 +55,7 @@ function CategoryCard({
       aria-label={t(category.labelKey)}
       className="group relative block min-h-[360px] overflow-hidden border border-sand-200/60 shadow-sm transition-shadow duration-500 hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-sand-100 dark:border-sand-800 dark:focus-visible:ring-offset-sand-900 lg:min-h-[480px]"
     >
-      <Image
+      <FadeImage
         src={category.image}
         alt={category.alt}
         fill

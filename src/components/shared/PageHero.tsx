@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { Container } from "@/components/shared/Container";
+import { FadeImage } from "@/components/shared/FadeImage";
 
 export function PageHero({
   eyebrow,
@@ -14,7 +14,7 @@ export function PageHero({
 }) {
   return (
     <section className="relative h-[70svh] min-h-[480px] w-full overflow-hidden">
-      <Image src={image} alt="" fill priority sizes="100vw" className="object-cover" />
+      <FadeImage src={image} alt="" fill priority sizes="100vw" className="object-cover" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/15 to-black/55" />
       <Container className="relative z-10 h-full flex flex-col justify-end pb-20">
         <p className="text-sand-100/90 tracking-[0.4em] uppercase text-xs">{eyebrow}</p>
