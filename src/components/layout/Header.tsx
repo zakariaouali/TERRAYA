@@ -65,7 +65,7 @@ function ThemeToggle({ onDark }: { onDark: boolean }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const isDark = resolvedTheme === "dark";
+  const isDark = mounted && resolvedTheme === "dark";
   return (
     <button
       type="button"
@@ -73,7 +73,7 @@ function ThemeToggle({ onDark }: { onDark: boolean }) {
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className={cn(controlBase, controlColor(onDark))}
     >
-      {mounted && isDark ? <Sun size={16} /> : <Moon size={16} />}
+      {isDark ? <Sun size={16} /> : <Moon size={16} />}
     </button>
   );
 }
