@@ -20,6 +20,7 @@ export function whatsappHref(message?: string) {
 // the more specific per-listing context a property page provides on its own.
 const ROUTE_MESSAGES: { prefix: string; message: string }[] = [
   { prefix: "/properties", message: "Hello TERRAYA, I have a question about your properties." },
+  { prefix: "/list-your-property", message: "Hello TERRAYA, I'd like to list my property." },
   { prefix: "/investment", message: "Hello TERRAYA, I'd like to know more about your investment advisory." },
   { prefix: "/services", message: "Hello TERRAYA, I'd like to know more about your services." },
   { prefix: "/about", message: "Hello TERRAYA, I'd like to know more about your agency." },
