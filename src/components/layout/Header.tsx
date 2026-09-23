@@ -58,6 +58,7 @@ const links = [
   { href: "/services", key: "nav.services" },
   { href: "/investment", key: "nav.invest" },
   { href: "/contact", key: "nav.contact" },
+  { href: "/list-your-property", key: "nav.sell" },
 ];
 
 function ThemeToggle({ onDark }: { onDark: boolean }) {

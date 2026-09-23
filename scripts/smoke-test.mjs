@@ -153,6 +153,50 @@ async function main() {
   await prisma.consultationRequest.deleteMany({ where: { email: testEmail } });
   await prisma.$disconnect();
 
+  // 7. Seller listing-submission pipeline.
+  const submissionForm = new FormData();
+  submissionForm.append("name", "Smoke Seller");
+  submissionForm.append("phone", "+212600000000");
+  submissionForm.append("email", `seller-smoke-${Date.now()}@test.local`);
+  submissionForm.append("propertyType", "VILLA");
+  submissionForm.append("city", "Gueliz");
+  const realPngForSubmission = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0, 0, 0, 0]);
+  submissionForm.append("photos", new Blob([realPngForSubmission], { type: "image/png" }), "photo.png");
+  const submissionRes = await fetch(BASE + "/api/listing-submissions", { method: "POST", body: submissionForm });
+  const submissionBody = await submissionRes.json().catch(() => ({}));
+  check("listing submission with a real photo succeeds", submissionRes.status === 201 && !!submissionBody.data?.id);
+
+  const badSubmissionForm = new FormData();
+  badSubmissionForm.append("name", "Smoke Seller");
+  badSubmissionForm.append("phone", "+212600000000");
+  badSubmissionForm.append("email", "seller-smoke-bad@test.local");
+  badSubmissionForm.append("propertyType", "VILLA");
+  badSubmissionForm.append("city", "Gueliz");
+  badSubmissionForm.append("photos", new Blob(["not an image"], { type: "image/jpeg" }), "fake.jpg");
+  const badSubmissionRes = await fetch(BASE + "/api/listing-submissions", { method: "POST", body: badSubmissionForm });
+  check("listing submission with a fake photo is rejected", badSubmissionRes.status === 400);
+
+  const anonListingsGet = await fetch(BASE + "/api/listing-submissions");
+  check("anonymous GET on listing-submissions is rejected", anonListingsGet.status === 401);
+
+  const anonListingsPatch = await fetch(BASE + "/api/listing-submissions/" + submissionBody.data?.id, {
+    method: "PATCH",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ status: "CONTACTED" }),
+  });
+  check("anonymous PATCH on listing-submissions is rejected", anonListingsPatch.status === 401);
+
+  const staffListingsPatch = await fetch(BASE + "/api/listing-submissions/" + submissionBody.data?.id, {
+    method: "PATCH",
+    headers: { "content-type": "application/json", cookie },
+    body: JSON.stringify({ status: "DECLINED" }),
+  });
+  check("staff PATCH on listing-submissions succeeds", staffListingsPatch.status === 200);
+
+  const prisma2 = new PrismaClient();
+  await prisma2.listingSubmission.deleteMany({ where: { name: "Smoke Seller" } });
+  await prisma2.$disconnect();
+
   console.log(`\n${failures === 0 ? "ALL PASS" : `${failures} FAILURE(S)`}`);
   process.exit(failures === 0 ? 0 : 1);
 }

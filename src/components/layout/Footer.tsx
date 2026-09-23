@@ -23,6 +23,7 @@ const columns: { titleKey: string; links: { href: string; key: string }[] }[] = 
       { href: "/properties", key: "footer.link.properties" },
       { href: "/investment", key: "footer.link.investment" },
       { href: "/services", key: "footer.link.services" },
+      { href: "/list-your-property", key: "footer.link.sell" },
     ],
   },
   {
