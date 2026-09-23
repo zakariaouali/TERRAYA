@@ -10,6 +10,7 @@ out
 .vercel
 prisma/dev.db
 prisma/migrations/dev
+tsconfig.tsbuildinfo
 
 # User-uploaded media
 /public/uploads
