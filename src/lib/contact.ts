@@ -5,9 +5,9 @@ export const CONTACT = {
   whatsapp: "212694838739",
   email: "Estateterraya@contact.com",
   addressLines: ["Résidence Les Jasmins", "Hivernage, Marrakech 40000", "Morocco"],
-  // Marrakech (Hivernage) — used for the embedded map.
-  lat: 31.6225,
-  lng: -8.0119,
+  // Office location pin — from the agency's Google Maps link.
+  lat: 31.6573327,
+  lng: -8.0159617,
 };
 
 export function whatsappHref(message?: string) {

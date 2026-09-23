@@ -1,3 +1,4 @@
+import path from "path";
 import type { NextConfig } from "next";
 
 const isProd = process.env.NODE_ENV === "production";
@@ -8,6 +9,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "img-src 'self' data: https: blob:",
   "font-src 'self' https://fonts.gstatic.com data:",
+  "frame-src 'self' https://www.openstreetmap.org",
   "connect-src 'self'",
   "frame-ancestors 'none'",
   "base-uri 'self'",
@@ -30,6 +32,10 @@ const nextConfig: NextConfig = {
   output: "standalone",
   reactStrictMode: true,
   poweredByHeader: false,
+  // A stray package-lock.json in the user's home directory made Next.js
+  // misinfer the workspace root, causing intermittent module-resolution
+  // failures. Pinning it to this project's own directory fixes that.
+  outputFileTracingRoot: path.join(__dirname),
   images: {
     formats: ["image/avif", "image/webp"],
     qualities: [80, 85, 90, 95],
