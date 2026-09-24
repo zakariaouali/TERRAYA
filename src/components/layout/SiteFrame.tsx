@@ -1,7 +1,6 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/shared/WhatsAppButton";
@@ -9,8 +8,12 @@ import { WhatsAppButton } from "@/components/shared/WhatsAppButton";
 /**
  * Wraps page content with the public marketing chrome (header, footer, WhatsApp).
  * The admin area has its own shell, so the public chrome is hidden there.
- * Route changes cross-fade rather than snapping in, so navigation reads as
- * alive rather than static (MotionConfig upstream honors prefers-reduced-motion).
+ *
+ * The route-change fade is a plain CSS animation on a keyed wrapper, not
+ * AnimatePresence: with `mode="wait"`, a page whose predecessor never
+ * finishes its exit animation is never mounted at all (header visible,
+ * content blank until a reload). A CSS enter animation has no exit phase to
+ * wait on, so it cannot leave a page stuck invisible.
  */
 export function SiteFrame({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -23,18 +26,11 @@ export function SiteFrame({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header />
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.main
-          key={pathname}
-          className="flex-1"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-        >
+      <main className="flex-1">
+        <div key={pathname} className="animate-page-in">
           {children}
-        </motion.main>
-      </AnimatePresence>
+        </div>
+      </main>
       <Footer />
       <WhatsAppButton />
     </>
