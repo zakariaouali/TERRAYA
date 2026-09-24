@@ -5,6 +5,7 @@ import { MotionConfig } from "framer-motion";
 import { LanguageProvider } from "@/lib/i18n";
 import { FavoritesProvider } from "@/lib/favorites";
 import { CurrencyProvider } from "@/lib/currency";
+import { SmoothScroll } from "@/components/shared/SmoothScroll";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -17,7 +18,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <LanguageProvider>
         <CurrencyProvider>
           <FavoritesProvider>
-            <MotionConfig reducedMotion="user">{children}</MotionConfig>
+            <MotionConfig reducedMotion="user">
+              <SmoothScroll />
+              {children}
+            </MotionConfig>
           </FavoritesProvider>
         </CurrencyProvider>
       </LanguageProvider>

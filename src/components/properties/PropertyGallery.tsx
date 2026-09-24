@@ -129,6 +129,7 @@ function Lightbox({
       role="dialog"
       aria-modal="true"
       aria-label={title}
+      data-lenis-prevent
       className="fixed inset-0 z-[120] bg-black/95 animate-page-in"
       onClick={() => {
         if (swipe.swiped()) return;

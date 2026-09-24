@@ -97,6 +97,7 @@ export function PropertyRequestPanel({
       {open && (
         <>
           <motion.div
+            data-lenis-prevent
             className="fixed inset-0 z-[90] bg-black/50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -108,6 +109,7 @@ export function PropertyRequestPanel({
             role="dialog"
             aria-modal="true"
             aria-label="Tell us what you're looking for"
+            data-lenis-prevent
             className="fixed inset-x-0 bottom-0 z-[91] max-h-[90vh] overflow-y-auto border-t border-sand-200 bg-sand-50 p-8 dark:border-sand-800 dark:bg-sand-900 sm:inset-x-auto sm:right-6 sm:bottom-6 sm:w-full sm:max-w-md sm:border sm:p-10"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
