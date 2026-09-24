@@ -1,5 +1,6 @@
 import path from "path";
 import type { NextConfig } from "next";
+import { PHASE_DEVELOPMENT_SERVER } from "next/constants";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -36,9 +37,6 @@ const nextConfig: NextConfig = {
   // misinfer the workspace root, causing intermittent module-resolution
   // failures. Pinning it to this project's own directory fixes that.
   outputFileTracingRoot: path.join(__dirname),
-  // Lets a dev server use its own build folder (NEXT_DIST_DIR=.next-dev) so it
-  // can't corrupt a production build being served from `.next` at the same time.
-  distDir: process.env.NEXT_DIST_DIR || ".next",
   images: {
     formats: ["image/avif", "image/webp"],
     qualities: [80, 85, 90, 95],
@@ -53,4 +51,14 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// `next dev` and `next build`/`next start` must never share a build folder:
+// a dev server overwrites the hashed production files, and a production
+// build deletes the ones a running dev server needs — both surface as
+// "__webpack_modules__[moduleId] is not a function" / ChunkLoadError. So the
+// dev server always gets its own folder (NEXT_DIST_DIR still overrides).
+export default function config(phase: string): NextConfig {
+  return {
+    ...nextConfig,
+    distDir: process.env.NEXT_DIST_DIR || (phase === PHASE_DEVELOPMENT_SERVER ? ".next-dev" : ".next"),
+  };
+}
