@@ -4,6 +4,7 @@ import { getAllProperties } from "@/lib/properties";
 import { Container } from "@/components/shared/Container";
 import { PropertyCard } from "@/components/properties/PropertyCard";
 import { PropertyFilters } from "@/components/properties/PropertyFilters";
+import { RevealText } from "@/components/shared/RevealText";
 
 export const metadata: Metadata = {
   title: "Properties",
@@ -66,9 +67,7 @@ export default async function PropertiesPage({
       <Container>
         <div className="max-w-3xl">
           <p className="eyebrow mb-4"><span className="luxury-divider">{copy.eyebrow}</span></p>
-          <h1 className="font-display text-5xl lg:text-7xl text-sand-900 dark:text-sand-100 leading-[1.05]">
-            {copy.title}
-          </h1>
+          <RevealText as="h1" className="font-display text-5xl lg:text-7xl text-sand-900 dark:text-sand-100 leading-[1.05]">{copy.title}</RevealText>
           <p className="mt-6 text-sand-700 dark:text-sand-300 text-lg leading-relaxed">
             {copy.description}
           </p>

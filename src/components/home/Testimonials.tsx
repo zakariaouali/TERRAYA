@@ -3,6 +3,7 @@
 import { Container } from "@/components/shared/Container";
 import { FadeIn } from "@/components/shared/FadeIn";
 import { useLang } from "@/lib/i18n";
+import { RevealText } from "@/components/shared/RevealText";
 
 const quotes = [
   { quoteKey: "home.testi.q1", authorKey: "home.testi.a1" },
@@ -16,9 +17,7 @@ export function Testimonials() {
     <section className="py-28 lg:py-40 bg-sand-900 text-sand-50">
       <Container>
         <p className="eyebrow mb-4 text-sand-300"><span className="luxury-divider">{t("home.testi.eyebrow")}</span></p>
-        <h2 className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.05] max-w-3xl">
-          {t("home.testi.title")}
-        </h2>
+        <RevealText as="h2" className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.05] max-w-3xl">{t("home.testi.title")}</RevealText>
 
         <div className="mt-16 grid gap-10 lg:grid-cols-3">
           {quotes.map((q, i) => (

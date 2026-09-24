@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRef } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { SeedProperty } from "@/data/properties";
@@ -8,6 +7,7 @@ import { Container } from "@/components/shared/Container";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { PropertyCard } from "@/components/properties/PropertyCard";
 import { useLang } from "@/lib/i18n";
+import { ArrowLink } from "@/components/shared/ArrowLink";
 
 export function FeaturedProperties({ properties }: { properties: SeedProperty[] }) {
   const { t } = useLang();
@@ -50,12 +50,7 @@ export function FeaturedProperties({ properties }: { properties: SeedProperty[] 
                 <ArrowRight size={16} />
               </button>
             </div>
-            <Link
-              href="/properties"
-              className="text-xs tracking-[0.28em] uppercase text-sand-900 dark:text-sand-100 border-b border-sand-900 dark:border-sand-100 pb-1"
-            >
-              {t("home.feat.link")}
-            </Link>
+            <ArrowLink href="/properties">{t("home.feat.link")}</ArrowLink>
           </div>
         </div>
 

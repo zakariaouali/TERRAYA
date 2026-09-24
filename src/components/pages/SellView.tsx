@@ -11,6 +11,7 @@ import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 import { whatsappHref, whatsappMessageForPath } from "@/lib/contact";
 import { useLang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { RevealText } from "@/components/shared/RevealText";
 
 const PROPERTY_TYPES = ["VILLA", "ESTATE", "PENTHOUSE", "RESIDENCE", "RIAD", "LAND"];
 const MAX_PHOTOS = 5;
@@ -418,9 +419,7 @@ export function SellView() {
     <div className="pt-32 lg:pt-40 pb-24">
       <Container className="max-w-2xl">
         <p className="eyebrow mb-4"><span className="luxury-divider">{t("sell.eyebrow")}</span></p>
-        <h1 className="font-display text-5xl lg:text-7xl text-sand-900 dark:text-sand-100 leading-[1.02]">
-          {t("sell.title")}
-        </h1>
+        <RevealText as="h1" className="font-display text-5xl lg:text-7xl text-sand-900 dark:text-sand-100 leading-[1.02]">{t("sell.title")}</RevealText>
         <p className="mt-6 text-sand-700 dark:text-sand-300 text-lg leading-relaxed">
           {t("sell.text")}
         </p>

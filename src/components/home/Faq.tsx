@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { useLang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { RevealText } from "@/components/shared/RevealText";
 
 const items = [
   { q: "faq.q1", a: "faq.a1" },
@@ -25,9 +26,7 @@ export function Faq() {
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <div>
             <p className="eyebrow mb-4"><span className="luxury-divider">{t("faq.eyebrow")}</span></p>
-            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.05] text-sand-900 dark:text-sand-100">
-              {t("faq.title")}
-            </h2>
+            <RevealText as="h2" className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.05] text-sand-900 dark:text-sand-100">{t("faq.title")}</RevealText>
           </div>
 
           <div className="border-t border-sand-200 dark:border-sand-800">

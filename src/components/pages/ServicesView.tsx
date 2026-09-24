@@ -5,6 +5,7 @@ import { Container } from "@/components/shared/Container";
 import { PageHero } from "@/components/shared/PageHero";
 import { FadeIn } from "@/components/shared/FadeIn";
 import { useLang } from "@/lib/i18n";
+import { RevealText } from "@/components/shared/RevealText";
 
 const buyerItems = [
   { tKey: "services.buyers.item1.t", dKey: "services.buyers.item1.d" },
@@ -37,9 +38,7 @@ function Audience({
       <Container>
         <div className="max-w-2xl">
           <p className="eyebrow mb-4"><span className="luxury-divider">{eyebrow}</span></p>
-          <h2 className="font-display text-4xl md:text-5xl text-sand-900 dark:text-sand-100 leading-[1.05]">
-            {title}
-          </h2>
+          <RevealText as="h2" className="font-display text-4xl md:text-5xl text-sand-900 dark:text-sand-100 leading-[1.05]">{title}</RevealText>
           <p className="mt-6 text-lg leading-relaxed text-sand-700 dark:text-sand-300">
             {text}
           </p>
@@ -90,9 +89,7 @@ export function ServicesView() {
       <section className="py-28 lg:py-40 border-t border-sand-200 dark:border-sand-800">
         <Container className="text-center max-w-2xl mx-auto">
           <p className="eyebrow mb-4"><span className="luxury-divider">{t("services.consult.eyebrow")}</span></p>
-          <h2 className="font-display text-4xl md:text-5xl text-sand-900 dark:text-sand-100 leading-[1.05]">
-            {t("services.consult.title")}
-          </h2>
+          <RevealText as="h2" className="font-display text-4xl md:text-5xl text-sand-900 dark:text-sand-100 leading-[1.05]">{t("services.consult.title")}</RevealText>
           <p className="mt-6 text-sand-700 dark:text-sand-300 leading-relaxed text-lg">
             {t("services.consult.text")}
           </p>

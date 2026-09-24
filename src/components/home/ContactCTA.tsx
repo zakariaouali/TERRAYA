@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { Container } from "@/components/shared/Container";
 import { FadeImage } from "@/components/shared/FadeImage";
 import { useLang } from "@/lib/i18n";
+import { RevealText } from "@/components/shared/RevealText";
+import { MagneticButton } from "@/components/shared/MagneticButton";
 
 export function ContactCTA() {
   const { t } = useLang();
@@ -19,18 +20,13 @@ export function ContactCTA() {
       <div className="absolute inset-0 bg-sand-900/65" />
       <Container className="relative text-center text-sand-50">
         <p className="eyebrow text-sand-300"><span className="luxury-divider">{t("home.cta.eyebrow")}</span></p>
-        <h2 className="font-display text-4xl md:text-6xl lg:text-7xl mt-6 leading-[1.05] max-w-3xl mx-auto">
-          {t("home.cta.title")}
-        </h2>
+        <RevealText as="h2" className="font-display text-4xl md:text-6xl lg:text-7xl mt-6 leading-[1.05] max-w-3xl mx-auto">{t("home.cta.title")}</RevealText>
         <p className="mt-6 text-sand-200/90 max-w-xl mx-auto leading-relaxed text-lg">
           {t("home.cta.text")}
         </p>
-        <Link
-          href="/contact"
-          className="mt-12 inline-block bg-sand-50 text-sand-900 px-10 py-4 tracking-[0.22em] uppercase text-xs hover:bg-sand-200 transition-colors"
-        >
+        <MagneticButton href="/contact" variant="light" className="mt-12">
           {t("home.cta.button")}
-        </Link>
+        </MagneticButton>
       </Container>
     </section>
   );

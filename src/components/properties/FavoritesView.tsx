@@ -7,6 +7,8 @@ import { PropertyCard } from "@/components/properties/PropertyCard";
 import { PropertyGridSkeleton } from "@/components/ui/Skeleton";
 import { useFavorites } from "@/lib/favorites";
 import { useLang } from "@/lib/i18n";
+import { RevealText } from "@/components/shared/RevealText";
+import { MagneticButton } from "@/components/shared/MagneticButton";
 
 export function FavoritesView({ properties }: { properties: SeedProperty[] }) {
   const { favorites, ready, clear } = useFavorites();
@@ -20,9 +22,7 @@ export function FavoritesView({ properties }: { properties: SeedProperty[] }) {
           <p className="eyebrow mb-4">
             <span className="luxury-divider">{t("saved.eyebrow")}</span>
           </p>
-          <h1 className="font-display text-5xl lg:text-7xl text-sand-900 dark:text-sand-100 leading-[1.05]">
-            {t("saved.title")}
-          </h1>
+          <RevealText as="h1" className="font-display text-5xl lg:text-7xl text-sand-900 dark:text-sand-100 leading-[1.05]">{t("saved.title")}</RevealText>
         </div>
 
         {/* Loading state while reading saved items from storage */}
@@ -36,12 +36,9 @@ export function FavoritesView({ properties }: { properties: SeedProperty[] }) {
         {ready && saved.length === 0 && (
           <div className="mt-16 border-t border-sand-200 dark:border-sand-800 pt-16 text-center">
             <p className="font-display text-2xl text-sand-700 dark:text-sand-300">{t("saved.empty")}</p>
-            <Link
-              href="/properties"
-              className="mt-8 inline-flex items-center bg-sand-900 px-9 py-4 text-[0.7rem] uppercase tracking-[0.24em] text-sand-50 transition-colors hover:bg-sand-700 dark:bg-sand-100 dark:text-sand-900 dark:hover:bg-sand-300"
-            >
+            <MagneticButton href="/properties" className="mt-8">
               {t("saved.browse")}
-            </Link>
+            </MagneticButton>
           </div>
         )}
 

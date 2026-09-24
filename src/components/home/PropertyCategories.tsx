@@ -6,6 +6,7 @@ import { Container } from "@/components/shared/Container";
 import { FadeIn } from "@/components/shared/FadeIn";
 import { FadeImage } from "@/components/shared/FadeImage";
 import { useLang } from "@/lib/i18n";
+import { RevealText } from "@/components/shared/RevealText";
 
 /**
  * Two core ways to engage with the collection: Buy, or Rent long-term (a
@@ -95,9 +96,7 @@ export function PropertyCategories() {
             <p className="eyebrow mb-4">
               <span className="luxury-divider">{t("cat.eyebrow")}</span>
             </p>
-            <h2 className="font-display text-4xl leading-[1.05] text-sand-900 dark:text-sand-100 md:text-5xl lg:text-6xl">
-              {t("cat.title")}
-            </h2>
+            <RevealText as="h2" className="font-display text-4xl leading-[1.05] text-sand-900 dark:text-sand-100 md:text-5xl lg:text-6xl">{t("cat.title")}</RevealText>
             <p className="mt-6 text-lg leading-relaxed text-sand-700 dark:text-sand-300">
               {t("cat.lead")}
             </p>

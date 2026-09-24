@@ -5,6 +5,7 @@ import { PageHero } from "@/components/shared/PageHero";
 import { FadeIn } from "@/components/shared/FadeIn";
 import { FadeImage } from "@/components/shared/FadeImage";
 import { useLang } from "@/lib/i18n";
+import { RevealText } from "@/components/shared/RevealText";
 
 const values = [
   { tKey: "about.values.discretion.t", dKey: "about.values.discretion.d" },
@@ -34,9 +35,7 @@ export function AboutView() {
         <Container className="grid gap-16 lg:grid-cols-2 lg:items-center">
           <FadeIn>
             <p className="eyebrow mb-4"><span className="luxury-divider">{t("about.story.eyebrow")}</span></p>
-            <h2 className="font-display text-4xl md:text-5xl text-sand-900 dark:text-sand-100 leading-[1.05]">
-              {t("about.story.title")}
-            </h2>
+            <RevealText as="h2" className="font-display text-4xl md:text-5xl text-sand-900 dark:text-sand-100 leading-[1.05]">{t("about.story.title")}</RevealText>
             <p className="mt-6 text-sand-700 dark:text-sand-300 text-lg leading-relaxed">{t("about.story.p1")}</p>
             <p className="mt-4 text-sand-700 dark:text-sand-300 text-lg leading-relaxed">{t("about.story.p2")}</p>
           </FadeIn>
@@ -57,9 +56,7 @@ export function AboutView() {
       <section className="py-28 lg:py-40 bg-sand-200/40 dark:bg-sand-800/30">
         <Container>
           <p className="eyebrow mb-4"><span className="luxury-divider">{t("about.values.eyebrow")}</span></p>
-          <h2 className="font-display text-4xl md:text-5xl text-sand-900 dark:text-sand-100 leading-[1.05] max-w-3xl">
-            {t("about.values.title")}
-          </h2>
+          <RevealText as="h2" className="font-display text-4xl md:text-5xl text-sand-900 dark:text-sand-100 leading-[1.05] max-w-3xl">{t("about.values.title")}</RevealText>
           <div className="mt-16 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
             {values.map((v, i) => (
               <FadeIn key={v.tKey} delay={i * 0.08}>
@@ -76,7 +73,7 @@ export function AboutView() {
       <section className="py-28 lg:py-40">
         <Container>
           <p className="eyebrow mb-4"><span className="luxury-divider">{t("about.office.eyebrow")}</span></p>
-          <h2 className="font-display text-4xl md:text-5xl text-sand-900 dark:text-sand-100 leading-[1.05]">{t("about.office.title")}</h2>
+          <RevealText as="h2" className="font-display text-4xl md:text-5xl text-sand-900 dark:text-sand-100 leading-[1.05]">{t("about.office.title")}</RevealText>
           <div className="mt-16 grid gap-10 md:grid-cols-3">
             {team.map((member, i) => (
               <FadeIn key={member.name} delay={i * 0.08}>

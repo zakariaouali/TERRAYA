@@ -5,6 +5,7 @@ import { Container } from "@/components/shared/Container";
 import { FadeIn } from "@/components/shared/FadeIn";
 import { FadeImage } from "@/components/shared/FadeImage";
 import { useLang } from "@/lib/i18n";
+import { RevealText } from "@/components/shared/RevealText";
 
 const tiles = [
   { labelKey: "home.life.medina", image: "https://images.unsplash.com/photo-1565020244281-fe53df7df170?auto=format&fit=crop&w=1400&q=80" },
@@ -21,9 +22,7 @@ export function Lifestyle() {
       <Container>
         <div className="max-w-2xl mb-16">
           <p className="eyebrow mb-4"><span className="luxury-divider">{t("home.life.eyebrow")}</span></p>
-          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-sand-900 dark:text-sand-100 leading-[1.05]">
-            {t("home.life.title")}
-          </h2>
+          <RevealText as="h2" className="font-display text-4xl md:text-5xl lg:text-6xl text-sand-900 dark:text-sand-100 leading-[1.05]">{t("home.life.title")}</RevealText>
           <p className="mt-6 text-sand-700 dark:text-sand-300 leading-relaxed text-lg">
             {t("home.life.text")}
           </p>

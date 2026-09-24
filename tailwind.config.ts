@@ -43,6 +43,9 @@ const config: Config = {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
         },
+        "reveal-failsafe": {
+          "100%": { transform: "none" },
+        },
         "chat-in": {
           "0%": { opacity: "0", transform: "translateY(10px) scale(0.96)" },
           "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
@@ -55,6 +58,7 @@ const config: Config = {
       animation: {
         "fade-up": "fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both",
         "page-in": "page-in 0.35s ease-out",
+        "reveal-failsafe": "reveal-failsafe 0.01s 4s forwards",
         "chat-in": "chat-in 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
         "typing-dot": "typing-dot 1.1s ease-in-out infinite",
       },

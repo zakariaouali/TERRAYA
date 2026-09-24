@@ -7,6 +7,8 @@ import { FadeImage } from "@/components/shared/FadeImage";
 import { insights } from "@/data/insights";
 import { insightCardFr } from "@/data/content.fr";
 import { useLang } from "@/lib/i18n";
+import { RevealText } from "@/components/shared/RevealText";
+import { ArrowLink } from "@/components/shared/ArrowLink";
 
 export function MarketInsights() {
   const { t, lang } = useLang();
@@ -18,13 +20,9 @@ export function MarketInsights() {
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-16">
           <div className="max-w-xl">
             <p className="eyebrow mb-4"><span className="luxury-divider">{t("home.journal.eyebrow")}</span></p>
-            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-sand-900 dark:text-sand-100 leading-[1.05]">
-              {t("home.journal.title")}
-            </h2>
+            <RevealText as="h2" className="font-display text-4xl md:text-5xl lg:text-6xl text-sand-900 dark:text-sand-100 leading-[1.05]">{t("home.journal.title")}</RevealText>
           </div>
-          <Link href="/insights" className="text-xs tracking-[0.28em] uppercase text-sand-900 dark:text-sand-100 border-b border-sand-900 dark:border-sand-100 pb-1 self-start lg:self-end">
-            {t("home.journal.link")}
-          </Link>
+          <ArrowLink href="/insights" className="self-start lg:self-end">{t("home.journal.link")}</ArrowLink>
         </div>
 
         <div className="grid gap-10 lg:grid-cols-3">

@@ -7,6 +7,7 @@ import { ConversationPreview } from "@/components/contact/ConversationPreview";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 import { CONTACT, whatsappHref, whatsappMessageForPath } from "@/lib/contact";
 import { useLang } from "@/lib/i18n";
+import { RevealText } from "@/components/shared/RevealText";
 
 const offices = [{ city: "Marrakech", lines: ["Hivernage", CONTACT.phone] }];
 
@@ -17,9 +18,7 @@ export function ContactView() {
       <Container className="grid gap-20 lg:grid-cols-[1.1fr_1fr]">
         <div>
           <p className="eyebrow mb-4"><span className="luxury-divider">{t("contact.eyebrow")}</span></p>
-          <h1 className="font-display text-5xl lg:text-7xl text-sand-900 dark:text-sand-100 leading-[1.02]">
-            {t("contact.title")}
-          </h1>
+          <RevealText as="h1" className="font-display text-5xl lg:text-7xl text-sand-900 dark:text-sand-100 leading-[1.02]">{t("contact.title")}</RevealText>
           <p className="mt-6 text-sand-700 dark:text-sand-300 text-lg leading-relaxed max-w-lg">
             {t("contact.text")}
           </p>
@@ -55,9 +54,7 @@ export function ContactView() {
       {/* Visit us — hours, address & map */}
       <Container className="mt-28 lg:mt-40">
         <p className="eyebrow mb-4"><span className="luxury-divider">{t("contact.visit.eyebrow")}</span></p>
-        <h2 className="font-display text-4xl md:text-5xl text-sand-900 dark:text-sand-100 leading-[1.05]">
-          {t("contact.visit.title")}
-        </h2>
+        <RevealText as="h2" className="font-display text-4xl md:text-5xl text-sand-900 dark:text-sand-100 leading-[1.05]">{t("contact.visit.title")}</RevealText>
 
         <div className="mt-12 grid gap-10 lg:grid-cols-[0.9fr_1.4fr] lg:items-stretch">
           <div className="flex flex-col gap-8">

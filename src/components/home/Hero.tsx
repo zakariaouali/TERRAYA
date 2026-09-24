@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { useLang } from "@/lib/i18n";
+import { MagneticButton } from "@/components/shared/MagneticButton";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -76,19 +76,13 @@ export function Hero() {
             {...fadeUp(0.5)}
             className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:gap-5"
           >
-            <Link
-              href="/properties"
-              className="group inline-flex items-center justify-center whitespace-nowrap bg-white px-10 py-4 text-[0.7rem] uppercase tracking-[0.26em] text-sand-900 transition-colors duration-300 hover:bg-white/90"
-            >
+            <MagneticButton href="/properties" variant="light" className="whitespace-nowrap">
               {t("hero.discover")}
-              <ArrowRight size={14} className="ml-3 transition-transform duration-300 group-hover:translate-x-1.5" />
-            </Link>
-            <Link
-              href="/consultation"
-              className="inline-flex items-center justify-center whitespace-nowrap border border-white/60 px-10 py-4 text-[0.7rem] uppercase tracking-[0.26em] text-white backdrop-blur-sm transition-colors duration-300 hover:bg-white hover:text-sand-900"
-            >
+              <ArrowRight size={14} />
+            </MagneticButton>
+            <MagneticButton href="/consultation" variant="outline-light" className="whitespace-nowrap">
               {t("hero.consult")}
-            </Link>
+            </MagneticButton>
           </motion.div>
         </div>
       </Container>
