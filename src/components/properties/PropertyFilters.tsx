@@ -14,6 +14,7 @@ import {
   PROPERTY_TYPES, SORTS, activeFilterCount, filtersToQuery, parseFilters, type PropertyFilters as Filters,
 } from "@/lib/property-search";
 import { useLang } from "@/lib/i18n";
+import { useCurrency } from "@/lib/currency";
 import { cn } from "@/lib/utils";
 
 const COPY = {
@@ -36,12 +37,12 @@ const COPY = {
 } as const;
 
 const DEBOUNCE_MS = 800;
-const fmt = (n: number) => (n >= 1_000_000 ? `€${+(n / 1_000_000).toFixed(1)}M` : n >= 1000 ? `€${+(n / 1000).toFixed(1)}K` : `€${n}`);
 
 export function PropertyFilters() {
   const router = useRouter();
   const params = useSearchParams();
   const { lang } = useLang();
+  const { formatCompact: fmt } = useCurrency();
   const c = COPY[lang === "fr" ? "fr" : "en"];
   const [pending, startTransition] = useTransition();
   const filters = useMemo(() => parseFilters(params), [params]);

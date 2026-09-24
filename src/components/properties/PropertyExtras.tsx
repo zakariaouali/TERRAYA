@@ -8,6 +8,7 @@ import { FEATURE_ICONS } from "@/components/properties/featureIcons";
 import { Price } from "@/components/shared/Price";
 import type { ListingType } from "@/data/properties";
 import { useLang } from "@/lib/i18n";
+import { useCurrency } from "@/lib/currency";
 
 export function ShareButton({ title }: { title: string }) {
   const { lang } = useLang();
@@ -78,5 +79,17 @@ export function MobileContactBar({ eur, listingType }: { eur: number; listingTyp
         {lang === "fr" ? "Nous contacter" : "Enquire"}
       </a>
     </div>
+  );
+}
+
+/** Shown under prices when a non-EUR currency is active: rates are indicative. */
+export function CurrencyNote() {
+  const { currency } = useCurrency();
+  const { lang } = useLang();
+  if (currency === "EUR") return null;
+  return (
+    <p className="mt-2 text-xs text-sand-500 dark:text-sand-400">
+      {lang === "fr" ? "Conversion indicative. Le prix est fixé en EUR." : "Indicative conversion. The listing price is set in EUR."}
+    </p>
   );
 }

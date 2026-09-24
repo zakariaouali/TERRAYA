@@ -5,7 +5,7 @@ import { MapPin, BedDouble, Bath, Maximize, TrendingUp } from "lucide-react";
 import { getAllProperties, getPropertyBySlug, getPropertySlugs } from "@/lib/properties";
 import { Container } from "@/components/shared/Container";
 import { PropertyMosaic } from "@/components/properties/PropertyMosaic";
-import { FeatureGrid, MobileContactBar, ShareButton } from "@/components/properties/PropertyExtras";
+import { CurrencyNote, FeatureGrid, MobileContactBar, ShareButton } from "@/components/properties/PropertyExtras";
 import { FavoriteButton } from "@/components/properties/FavoriteButton";
 import { RevealText } from "@/components/shared/RevealText";
 import { LazyMap } from "@/components/properties/LazyMap";
@@ -175,6 +175,7 @@ export default async function PropertyDetailPage({
             <div className="border border-sand-200 bg-white/50 p-7 shadow-sm dark:border-sand-800 dark:bg-white/[0.03] sm:p-8">
               <p className="eyebrow">{listingPriceLabel(p.listingType)}</p>
               <Price eur={p.priceEur} listingType={p.listingType} className="mt-2 block text-3xl font-medium text-sand-900 dark:text-sand-100 lg:text-4xl" />
+              <CurrencyNote />
               {rentalTerms(p.listingType) && (
                 <p className="mt-1 text-xs uppercase tracking-[0.2em] text-sand-500">{rentalTerms(p.listingType)}</p>
               )}

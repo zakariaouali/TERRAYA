@@ -7,6 +7,7 @@ import { Input, Label, Select, Textarea } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/shared/Spinner";
 import { cn } from "@/lib/utils";
+import { useCurrency } from "@/lib/currency";
 
 const PROPERTY_TYPES = ["", "VILLA", "ESTATE", "PENTHOUSE", "RESIDENCE", "RIAD", "LAND"];
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -37,6 +38,7 @@ export function PropertyRequestPanel({
   onClose: () => void;
   initial?: Initial;
 }) {
+  const { currency, fromDisplay } = useCurrency();
   const [data, setData] = useState<FormState>(() => EMPTY(initial));
   const [status, setStatus] = useState<"idle" | "loading" | "sent" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
@@ -72,8 +74,8 @@ export function PropertyRequestPanel({
       propertyType: data.propertyType || undefined,
       city: data.city || undefined,
       bedrooms: data.bedrooms ? Number(data.bedrooms) : undefined,
-      minBudget: data.minBudget ? Number(data.minBudget) : undefined,
-      maxBudget: data.maxBudget ? Number(data.maxBudget) : undefined,
+      minBudget: data.minBudget ? fromDisplay(Number(data.minBudget)) : undefined,
+      maxBudget: data.maxBudget ? fromDisplay(Number(data.maxBudget)) : undefined,
       notes: data.notes || undefined,
     };
     const res = await fetch("/api/property-requests", {
@@ -90,7 +92,7 @@ export function PropertyRequestPanel({
     setStatus("sent");
   }
 
-  const budgetUnit = data.listingType === "RENT" ? "€ / month" : "€";
+  const budgetUnit = data.listingType === "RENT" ? `${currency} / month` : currency;
 
   return (
     <AnimatePresence>

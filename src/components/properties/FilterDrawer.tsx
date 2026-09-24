@@ -8,30 +8,43 @@ import { filtersToQuery, type PropertyFilters } from "@/lib/property-search";
 import { FEATURE_ICONS } from "@/components/properties/featureIcons";
 import { Spinner } from "@/components/shared/Spinner";
 import { useLang } from "@/lib/i18n";
+import { useCurrency } from "@/lib/currency";
 import { cn } from "@/lib/utils";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 const COPY = {
   en: {
-    title: "Filters", close: "Close", price: "Price", perMonth: "per month", min: "Min", max: "Max",
+    title: "Filters", close: "Close", price: "Price", perMonth: "per month", mo: "/mo", min: "Min", max: "Max",
     pricePick: "Choose Buy or Rent above to filter by price.", bedrooms: "Bedrooms", bathrooms: "Bathrooms",
     area: "Interior size", any: "Any", features: "Features", clear: "Clear all", show: "Show", one: "property",
     many: "properties", none: "No properties", buy: "Buy", rent: "Rent", all: "All",
   },
   fr: {
-    title: "Filtres", close: "Fermer", price: "Prix", perMonth: "par mois", min: "Min", max: "Max",
+    title: "Filtres", close: "Fermer", price: "Prix", perMonth: "par mois", mo: "/mois", min: "Min", max: "Max",
     pricePick: "Choisissez Acheter ou Louer pour filtrer par prix.", bedrooms: "Chambres", bathrooms: "Salles de bain",
     area: "Surface habitable", any: "Tous", features: "Équipements", clear: "Tout effacer", show: "Voir",
     one: "bien", many: "biens", none: "Aucun bien", buy: "Acheter", rent: "Louer", all: "Tous",
   },
 } as const;
 
-const SALE_PRESETS: [number, number][] = [[0, 2_500_000], [2_500_000, 5_000_000], [5_000_000, 10_000_000], [10_000_000, 0]];
-const RENT_PRESETS: [number, number][] = [[0, 2_000], [2_000, 4_000], [4_000, 8_000], [8_000, 0]];
-
-const fmt = (n: number) => (n >= 1_000_000 ? `€${+(n / 1_000_000).toFixed(1)}M` : n >= 1000 ? `€${+(n / 1000).toFixed(1)}K` : `€${n}`);
-const presetLabel = ([a, b]: [number, number]) => (!a ? `< ${fmt(b)}` : !b ? `${fmt(a)}+` : `${fmt(a)} – ${fmt(b)}`);
+// Preset bands are written in each currency's own round numbers (so MAD shows
+// "25M" rather than "27.1M") and converted to EUR, the canonical unit.
+type Band = [number, number];
+const PRESETS: Record<string, { SALE: Band[]; RENT: Band[] }> = {
+  EUR: {
+    SALE: [[0, 2_500_000], [2_500_000, 5_000_000], [5_000_000, 10_000_000], [10_000_000, 0]],
+    RENT: [[0, 2_000], [2_000, 4_000], [4_000, 8_000], [8_000, 0]],
+  },
+  USD: {
+    SALE: [[0, 3_000_000], [3_000_000, 6_000_000], [6_000_000, 12_000_000], [12_000_000, 0]],
+    RENT: [[0, 2_500], [2_500, 5_000], [5_000, 10_000], [10_000, 0]],
+  },
+  MAD: {
+    SALE: [[0, 25_000_000], [25_000_000, 50_000_000], [50_000_000, 100_000_000], [100_000_000, 0]],
+    RENT: [[0, 20_000], [20_000, 40_000], [40_000, 80_000], [80_000, 0]],
+  },
+};
 
 function Pills({ value, options, onChange, any }: { value: number; options: number[]; onChange: (n: number) => void; any: string }) {
   return (
@@ -77,10 +90,17 @@ export function FilterDrawer({
   onApply: (f: PropertyFilters) => void;
 }) {
   const { lang } = useLang();
+  const { currency, formatCompact: fmt, toDisplay, fromDisplay } = useCurrency();
+  const presetLabel = ([a, b]: [number, number]) => (!a ? `< ${fmt(b)}` : !b ? `${fmt(a)}+` : `${fmt(a)} – ${fmt(b)}`);
   const c = COPY[lang === "fr" ? "fr" : "en"];
   const [draft, setDraft] = useState(applied);
   const [count, setCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
+  // Price boxes are typed in the visitor's active currency; the URL and the
+  // database always use EUR. Text is kept locally so rounding never rewrites
+  // what is being typed.
+  const [priceText, setPriceText] = useState({ min: "", max: "" });
+  const showPrice = (eur: number) => (eur ? String(toDisplay(eur)) : "");
   const panelRef = useRef<HTMLDivElement>(null);
   const opener = useRef<HTMLElement | null>(null);
 
@@ -88,12 +108,18 @@ export function FilterDrawer({
   useEffect(() => {
     if (open) {
       setDraft(applied);
+      setPriceText({ min: showPrice(applied.min), max: showPrice(applied.max) });
       opener.current = document.activeElement as HTMLElement | null;
     } else {
       opener.current?.focus?.();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
+
+  useEffect(() => {
+    setPriceText({ min: showPrice(draft.min), max: showPrice(draft.max) });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currency]);
 
   // Live result count for the draft, debounced so dragging through options
   // doesn't fire a request per click.
@@ -137,7 +163,8 @@ export function FilterDrawer({
   const toggleFeature = (k: FeatureKey) =>
     patch({ features: draft.features.includes(k) ? draft.features.filter((x) => x !== k) : [...draft.features, k] });
 
-  const presets = draft.listingType === "RENT" ? RENT_PRESETS : SALE_PRESETS;
+  const bands = (PRESETS[currency] ?? PRESETS.EUR)[draft.listingType === "RENT" ? "RENT" : "SALE"];
+  const presets: Band[] = bands.map(([lo, hi]) => [lo ? fromDisplay(lo) : 0, hi ? fromDisplay(hi) : 0]);
   const priceInput = "h-12 w-full border border-sand-300 bg-transparent px-4 text-sand-900 focus:border-sand-700 focus:outline-none dark:border-sand-700 dark:text-sand-100 dark:focus:border-sand-400";
 
   const cta =
@@ -182,7 +209,7 @@ export function FilterDrawer({
                       key={v}
                       type="button"
                       aria-pressed={draft.listingType === v}
-                      onClick={() => patch({ listingType: v, min: 0, max: 0 })}
+                      onClick={() => { patch({ listingType: v, min: 0, max: 0 }); setPriceText({ min: "", max: "" }); }}
                       className={cn(
                         "rounded-full border px-4 py-2 text-sm transition-colors",
                         draft.listingType === v
@@ -204,25 +231,29 @@ export function FilterDrawer({
                             key={pr.join("-")}
                             type="button"
                             aria-pressed={on}
-                            onClick={() => patch(on ? { min: 0, max: 0 } : { min: pr[0], max: pr[1] })}
+                            onClick={() => {
+                              const next = on ? { min: 0, max: 0 } : { min: pr[0], max: pr[1] };
+                              patch(next);
+                              setPriceText({ min: showPrice(next.min), max: showPrice(next.max) });
+                            }}
                             className={cn(
                               "rounded-full border px-4 py-2 text-sm transition-colors",
                               on ? "border-sand-900 bg-sand-900 text-sand-50 dark:border-sand-100 dark:bg-sand-100 dark:text-sand-900" : "border-sand-300 text-sand-800 hover:border-sand-600 dark:border-sand-700 dark:text-sand-200"
                             )}
                           >
-                            {presetLabel(pr)}{draft.listingType === "RENT" ? " /mo" : ""}
+                            {presetLabel(pr)}{draft.listingType === "RENT" ? ` ${c.mo}` : ""}
                           </button>
                         );
                       })}
                     </div>
                     <div className="mt-4 grid grid-cols-2 gap-3">
                       <label className="block text-xs uppercase tracking-[0.18em] text-sand-500 dark:text-sand-400">
-                        {c.min} (€{draft.listingType === "RENT" ? " / mo" : ""})
-                        <input type="number" inputMode="numeric" min={0} value={draft.min || ""} onChange={(e) => patch({ min: Math.max(0, Number(e.target.value) || 0) })} className={cn(priceInput, "mt-2")} />
+                        {c.min} ({currency}{draft.listingType === "RENT" ? ` ${c.mo}` : ""})
+                        <input type="number" inputMode="numeric" min={0} value={priceText.min} onChange={(e) => { setPriceText((t) => ({ ...t, min: e.target.value })); patch({ min: fromDisplay(Math.max(0, Number(e.target.value) || 0)) }); }} className={cn(priceInput, "mt-2")} />
                       </label>
                       <label className="block text-xs uppercase tracking-[0.18em] text-sand-500 dark:text-sand-400">
-                        {c.max} (€{draft.listingType === "RENT" ? " / mo" : ""})
-                        <input type="number" inputMode="numeric" min={0} value={draft.max || ""} onChange={(e) => patch({ max: Math.max(0, Number(e.target.value) || 0) })} className={cn(priceInput, "mt-2")} />
+                        {c.max} ({currency}{draft.listingType === "RENT" ? ` ${c.mo}` : ""})
+                        <input type="number" inputMode="numeric" min={0} value={priceText.max} onChange={(e) => { setPriceText((t) => ({ ...t, max: e.target.value })); patch({ max: fromDisplay(Math.max(0, Number(e.target.value) || 0)) }); }} className={cn(priceInput, "mt-2")} />
                       </label>
                     </div>
                   </>
@@ -291,7 +322,7 @@ export function FilterDrawer({
             <footer className="flex items-center justify-between gap-4 border-t border-sand-200 bg-sand-50 px-6 py-4 dark:border-sand-800 dark:bg-sand-900 sm:px-8">
               <button
                 type="button"
-                onClick={() => setDraft({ ...draft, types: [], bedrooms: 0, bathrooms: 0, min: 0, max: 0, area: 0, features: [], listingType: "" })}
+                onClick={() => { setDraft({ ...draft, types: [], bedrooms: 0, bathrooms: 0, min: 0, max: 0, area: 0, features: [], listingType: "" }); setPriceText({ min: "", max: "" }); }}
                 className="text-sm text-sand-700 underline underline-offset-4 transition-colors hover:text-sand-900 dark:text-sand-300 dark:hover:text-sand-100"
               >
                 {c.clear}
