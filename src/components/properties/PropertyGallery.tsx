@@ -66,7 +66,7 @@ function NavButton({
   );
 }
 
-function Lightbox({
+export function Lightbox({
   images,
   title,
   index,

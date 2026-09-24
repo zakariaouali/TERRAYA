@@ -1,9 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { Phone, Mail } from "lucide-react";
 import type { SeedProperty } from "@/data/properties";
 import { Price } from "@/components/shared/Price";
+import { HoverFrame } from "@/components/shared/HoverFrame";
 import { FadeImage } from "@/components/shared/FadeImage";
 import { FavoriteButton } from "@/components/properties/FavoriteButton";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
@@ -21,6 +24,8 @@ const LISTING_BADGE: Record<SeedProperty["listingType"], string | null> = {
 
 export function PropertyCard({ p }: { p: SeedProperty }) {
   const { t, lang } = useLang();
+  const [armed, setArmed] = useState(false);
+  const second = p.images.find((src) => src !== p.heroImage);
   const listingBadge = LISTING_BADGE[p.listingType];
   const tagline = lang === "fr" ? propertyTaglineFr[p.slug] ?? p.tagline : p.tagline;
   const message = `${p.title} — ${p.city}, ${p.country}`;
@@ -32,19 +37,38 @@ export function PropertyCard({ p }: { p: SeedProperty }) {
   ];
 
   return (
-    <div className="group relative">
-      <div className="relative aspect-[4/5] overflow-hidden bg-sand-200 dark:bg-sand-800">
-        <FadeImage
-          src={p.heroImage}
-          alt={p.title}
-          fill
-          sizes="(min-width: 1024px) 33vw, 100vw"
-          className="object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent opacity-70 transition-opacity duration-700 group-hover:opacity-100" />
-        <div className="pointer-events-none absolute inset-3 scale-[0.97] border border-white/60 opacity-0 transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-100 group-hover:opacity-100" />
+    <div className="group relative" onPointerEnter={() => setArmed(true)}>
+      <HoverFrame
+        className="aspect-[4/5]"
+        cursorLabel={t("cursor.view")}
+        image={
+          <>
+            <FadeImage
+              src={p.heroImage}
+              alt={p.title}
+              fill
+              sizes="(min-width: 1024px) 33vw, 100vw"
+              className="object-cover"
+            />
+            {/* Second photo fades in on hover — only requested after the first hover */}
+            {second && armed && (
+              <Image
+                src={second}
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 33vw, 100vw"
+                className="object-cover opacity-0 transition-opacity duration-700 group-hover:opacity-100"
+              />
+            )}
+          </>
+        }
+      >
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 to-transparent opacity-70 transition-opacity duration-700 group-hover:opacity-100" />
+        <Link href={`/properties/${p.slug}`} className="absolute inset-0 z-10" aria-label={p.title}>
+          <span className="sr-only">{p.title}</span>
+        </Link>
 
-        <div className="absolute top-5 left-5 flex gap-2">
+        <div className="pointer-events-none absolute top-5 left-5 flex gap-2">
           <span className="px-3 py-1 text-[0.6rem] tracking-[0.28em] uppercase bg-sand-50/90 text-sand-900">{p.type}</span>
           {listingBadge && (
             <span className="px-3 py-1 text-[0.6rem] tracking-[0.28em] uppercase bg-sand-700/90 text-sand-50">{listingBadge}</span>
@@ -73,11 +97,11 @@ export function PropertyCard({ p }: { p: SeedProperty }) {
           ))}
         </div>
 
-        <div className="absolute bottom-5 left-5 right-5 text-sand-50">
+        <div className="pointer-events-none absolute bottom-5 left-5 right-24 text-sand-50">
           <p className="text-[0.65rem] tracking-[0.32em] uppercase opacity-90">{p.city}, {p.country}</p>
           <h3 className="font-display text-2xl mt-1">{p.title}</h3>
         </div>
-      </div>
+      </HoverFrame>
 
       <div className="mt-5 flex items-baseline justify-between gap-4">
         <Price eur={p.priceEur} listingType={p.listingType} className="text-xl font-medium text-sand-900 dark:text-sand-100" />
@@ -105,10 +129,6 @@ export function PropertyCard({ p }: { p: SeedProperty }) {
         </ul>
       )}
 
-      {/* Stretched navigation link sits under the interactive overlays (favorite / contact) */}
-      <Link href={`/properties/${p.slug}`} className="absolute inset-0 z-10" aria-label={p.title}>
-        <span className="sr-only">{p.title}</span>
-      </Link>
     </div>
   );
 }
