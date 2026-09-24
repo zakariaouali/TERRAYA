@@ -43,10 +43,20 @@ const config: Config = {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
         },
+        "chat-in": {
+          "0%": { opacity: "0", transform: "translateY(10px) scale(0.96)" },
+          "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
+        },
+        "typing-dot": {
+          "0%, 60%, 100%": { transform: "translateY(0)", opacity: "0.45" },
+          "30%": { transform: "translateY(-3px)", opacity: "1" },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both",
         "page-in": "page-in 0.35s ease-out",
+        "chat-in": "chat-in 0.45s cubic-bezier(0.16, 1, 0.3, 1)",
+        "typing-dot": "typing-dot 1.1s ease-in-out infinite",
       },
     },
   },

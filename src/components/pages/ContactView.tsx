@@ -3,6 +3,7 @@
 import { Clock, MapPin, Phone, ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { InquiryForm } from "@/components/properties/InquiryForm";
+import { ConversationPreview } from "@/components/contact/ConversationPreview";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 import { CONTACT, whatsappHref, whatsappMessageForPath } from "@/lib/contact";
 import { useLang } from "@/lib/i18n";
@@ -22,6 +23,8 @@ export function ContactView() {
           <p className="mt-6 text-sand-700 dark:text-sand-300 text-lg leading-relaxed max-w-lg">
             {t("contact.text")}
           </p>
+
+          <ConversationPreview />
 
           <div className="mt-16 grid gap-10 max-w-xs">
             {offices.map((o) => (

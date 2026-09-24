@@ -36,6 +36,9 @@ const nextConfig: NextConfig = {
   // misinfer the workspace root, causing intermittent module-resolution
   // failures. Pinning it to this project's own directory fixes that.
   outputFileTracingRoot: path.join(__dirname),
+  // Lets a dev server use its own build folder (NEXT_DIST_DIR=.next-dev) so it
+  // can't corrupt a production build being served from `.next` at the same time.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   images: {
     formats: ["image/avif", "image/webp"],
     qualities: [80, 85, 90, 95],
