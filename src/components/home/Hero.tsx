@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -80,9 +81,12 @@ export function Hero() {
               {t("hero.discover")}
               <ArrowRight size={14} />
             </MagneticButton>
-            <MagneticButton href="/consultation" variant="outline-light" className="whitespace-nowrap">
+            <Link
+              href="/consultation"
+              className="text-[0.72rem] uppercase tracking-[0.24em] text-white/85 underline decoration-white/40 underline-offset-8 transition-colors hover:text-white hover:decoration-white"
+            >
               {t("hero.consult")}
-            </MagneticButton>
+            </Link>
           </motion.div>
         </div>
       </Container>

@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/home/Hero";
-import { PropertyCategories } from "@/components/home/PropertyCategories";
 import { FeaturedProperties } from "@/components/home/FeaturedProperties";
 import { Lifestyle } from "@/components/home/Lifestyle";
 import { Testimonials } from "@/components/home/Testimonials";
-import { MarketInsights } from "@/components/home/MarketInsights";
-import { Faq } from "@/components/home/Faq";
-import { ContactCTA } from "@/components/home/ContactCTA";
+import { ConsultationSection } from "@/components/home/ConsultationSection";
+import { ConsultationBar } from "@/components/home/ConsultationBar";
 import { getFeaturedProperties } from "@/lib/properties";
 
 export const metadata: Metadata = {
@@ -20,13 +18,11 @@ export default async function HomePage() {
   return (
     <>
       <Hero />
-      <PropertyCategories />
       <FeaturedProperties properties={featured} />
       <Lifestyle />
       <Testimonials />
-      <MarketInsights />
-      <Faq />
-      <ContactCTA />
+      <ConsultationSection />
+      <ConsultationBar />
     </>
   );
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Faq } from "@/components/home/Faq";
 import { ConsultationView } from "@/components/pages/ConsultationView";
 
 export const metadata: Metadata = {
@@ -7,5 +8,10 @@ export const metadata: Metadata = {
 };
 
 export default function ConsultationPage() {
-  return <ConsultationView />;
+  return (
+    <>
+      <ConsultationView />
+      <Faq />
+    </>
+  );
 }
