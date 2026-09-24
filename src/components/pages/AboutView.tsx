@@ -6,6 +6,7 @@ import { FadeIn } from "@/components/shared/FadeIn";
 import { FadeImage } from "@/components/shared/FadeImage";
 import { useLang } from "@/lib/i18n";
 import { RevealText } from "@/components/shared/RevealText";
+import { HoverFrame } from "@/components/shared/HoverFrame";
 
 const values = [
   { tKey: "about.values.discretion.t", dKey: "about.values.discretion.d" },
@@ -77,12 +78,25 @@ export function AboutView() {
           <div className="mt-16 grid gap-10 md:grid-cols-3">
             {team.map((member, i) => (
               <FadeIn key={member.name} delay={i * 0.08}>
-                <div>
-                  <div className="relative aspect-[3/4] overflow-hidden">
-                    <FadeImage src={member.img} alt={member.name} fill sizes="(min-width:768px) 33vw, 100vw" className="object-cover" />
-                  </div>
-                  <p className="font-display text-2xl text-sand-900 dark:text-sand-100 mt-6">{member.name}</p>
+                <div className="group/team">
+                  <HoverFrame
+                    className="aspect-[3/4]"
+                    image={
+                      <FadeImage
+                        src={member.img}
+                        alt={member.name}
+                        fill
+                        sizes="(min-width:768px) 33vw, 100vw"
+                        className="object-cover grayscale-[0.45] transition-[filter] duration-[900ms] group-hover/hf:grayscale-0"
+                      />
+                    }
+                  />
+                  <p className="mt-6 font-display text-2xl text-sand-900 transition-transform duration-500 ease-out group-hover/team:translate-x-1.5 dark:text-sand-100">{member.name}</p>
                   <p className="eyebrow mt-2">{t(member.roleKey)}</p>
+                  <span
+                    aria-hidden="true"
+                    className="mt-4 block h-px w-10 bg-sand-400 transition-[width] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/team:w-full dark:bg-sand-600"
+                  />
                 </div>
               </FadeIn>
             ))}

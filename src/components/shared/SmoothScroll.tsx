@@ -35,7 +35,7 @@ export function SmoothScroll() {
       allowNestedScroll: true,
     });
     lenisRef.current = lenis;
-    if (process.env.NODE_ENV !== "production") window.lenis = lenis; // dev-only, for testing
+    if (process.env.NODE_ENV !== "production") (window as unknown as { lenis?: Lenis }).lenis = lenis; // dev-only, for testing
     return () => {
       lenis.destroy();
       lenisRef.current = null;

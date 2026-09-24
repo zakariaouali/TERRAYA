@@ -39,7 +39,8 @@ export function PropertyCard({ p }: { p: SeedProperty }) {
           sizes="(min-width: 1024px) 33vw, 100vw"
           className="object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent opacity-70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/45 to-transparent opacity-70 transition-opacity duration-700 group-hover:opacity-100" />
+        <div className="pointer-events-none absolute inset-3 scale-[0.97] border border-white/60 opacity-0 transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-100 group-hover:opacity-100" />
 
         <div className="absolute top-5 left-5 flex gap-2">
           <span className="px-3 py-1 text-[0.6rem] tracking-[0.28em] uppercase bg-sand-50/90 text-sand-900">{p.type}</span>
