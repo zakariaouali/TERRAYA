@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, MapPin, Phone, ArrowUpRight } from "lucide-react";
+import { Clock, Mail, MapPin, Phone, ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/shared/Container";
 import { InquiryForm } from "@/components/properties/InquiryForm";
 import { ConversationPreview } from "@/components/contact/ConversationPreview";
@@ -9,10 +9,14 @@ import { CONTACT, whatsappHref, whatsappMessageForPath } from "@/lib/contact";
 import { useLang } from "@/lib/i18n";
 import { RevealText } from "@/components/shared/RevealText";
 
-const offices = [{ city: "Marrakech", lines: ["Hivernage", CONTACT.phone] }];
 
 export function ContactView() {
   const { t } = useLang();
+  const channels = [
+    { key: "wa", icon: WhatsAppIcon, title: t("card.whatsapp"), detail: t("contact.channel.wa.d"), href: whatsappHref(whatsappMessageForPath("/contact")), external: true },
+    { key: "call", icon: Phone, title: t("card.call"), detail: `${CONTACT.phone} · ${t("contact.channel.call.d")}`, href: CONTACT.phoneHref, external: false },
+    { key: "mail", icon: Mail, title: t("card.email"), detail: `${CONTACT.email} · ${t("contact.channel.mail.d")}`, href: `mailto:${CONTACT.email}`, external: false },
+  ];
   return (
     <div className="pt-32 lg:pt-40 pb-24">
       <Container className="grid gap-20 lg:grid-cols-[1.1fr_1fr]">
@@ -23,26 +27,34 @@ export function ContactView() {
             {t("contact.text")}
           </p>
 
+          <div className="mt-14 grid gap-3">
+            {channels.map((c) => {
+              const Icon = c.icon;
+              return (
+                <a
+                  key={c.key}
+                  href={c.href}
+                  target={c.external ? "_blank" : undefined}
+                  rel={c.external ? "noopener noreferrer" : undefined}
+                  className="group relative flex items-center gap-5 overflow-hidden border border-sand-300 p-5 transition-all duration-500 hover:-translate-y-0.5 hover:border-sand-900 hover:shadow-lg dark:border-sand-700 dark:hover:border-sand-300"
+                >
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-sand-300 text-sand-800 transition-all duration-500 group-hover:border-sand-900 group-hover:bg-sand-900 group-hover:text-sand-50 dark:border-sand-700 dark:text-sand-200 dark:group-hover:border-sand-100 dark:group-hover:bg-sand-100 dark:group-hover:text-sand-900">
+                    <Icon size={20} strokeWidth={1.5} />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-display text-xl text-sand-900 dark:text-sand-100">{c.title}</span>
+                    <span className="mt-0.5 block text-sm text-sand-600 dark:text-sand-400">{c.detail}</span>
+                  </span>
+                  <ArrowUpRight size={18} className="shrink-0 text-sand-400 transition-all duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-sand-900 dark:group-hover:text-sand-100" />
+                </a>
+              );
+            })}
+          </div>
+
           <ConversationPreview />
-
-          <div className="mt-16 grid gap-10 max-w-xs">
-            {offices.map((o) => (
-              <div key={o.city} className="border-t border-sand-300 dark:border-sand-700 pt-5">
-                <p className="font-display text-2xl text-sand-900 dark:text-sand-100">{o.city}</p>
-                {o.lines.map((l) => (
-                  <p key={l} className="text-sand-700 dark:text-sand-300 mt-1">{l}</p>
-                ))}
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-16">
-            <p className="eyebrow mb-2">{t("contact.general")}</p>
-            <p className="font-display text-xl text-sand-900 dark:text-sand-100">{CONTACT.email}</p>
-          </div>
         </div>
 
-        <div className="border border-sand-200 dark:border-sand-800 p-8 lg:p-12 bg-sand-50 dark:bg-sand-900 h-fit">
+        <div className="h-fit border border-sand-200 bg-sand-50 p-8 shadow-sm dark:border-sand-800 dark:bg-sand-900 lg:sticky lg:top-28 lg:p-12">
           <p className="eyebrow">{t("contact.form.eyebrow")}</p>
           <h2 className="font-display text-3xl text-sand-900 dark:text-sand-100 mt-3">{t("contact.form.title")}</h2>
           <div className="mt-8">
