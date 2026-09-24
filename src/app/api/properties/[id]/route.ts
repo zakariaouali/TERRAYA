@@ -57,6 +57,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       priceEur: BigInt(d.priceEur),
       images: JSON.stringify(d.images),
       amenities: JSON.stringify(d.amenities),
+      features: JSON.stringify(d.features),
       highlights: JSON.stringify(d.highlights),
     },
   });

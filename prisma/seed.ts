@@ -37,6 +37,7 @@ async function main() {
       heroImage: p.heroImage,
       images: JSON.stringify(p.images),
       amenities: JSON.stringify(p.amenities),
+      features: JSON.stringify(p.features),
       highlights: JSON.stringify(p.highlights),
       latitude: p.latitude ?? null,
       longitude: p.longitude ?? null,

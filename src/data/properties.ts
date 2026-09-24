@@ -1,3 +1,5 @@
+import type { FeatureKey } from "@/lib/features";
+
 export type PropertyTypeLiteral =
   | "VILLA" | "ESTATE" | "PENTHOUSE" | "RESIDENCE" | "RIAD" | "LAND";
 
@@ -23,6 +25,7 @@ export type SeedProperty = {
   heroImage: string;
   images: string[];
   amenities: string[];
+  features: FeatureKey[];
   highlights: string[];
   latitude?: number;
   longitude?: number;
@@ -59,6 +62,7 @@ export const properties: SeedProperty[] = [
       u("photo-1582268611958-ebfd161ef9cf"),
     ],
     amenities: ["Infinity Pool", "Hammam", "Wellness Pavilion", "Olive Grove", "Staff Quarters", "Cinema Room"],
+    features: ["pool", "garden", "hammam", "spa", "staff", "views", "security", "parking", "pets"],
     highlights: [
       "8 hectares of private grounds with mature olive trees",
       "Designed by an award-winning Moroccan-French studio",
@@ -90,6 +94,7 @@ export const properties: SeedProperty[] = [
       u("photo-1600047509807-ba8f99d2cdde"),
     ],
     amenities: ["Private Garden", "Plunge Pool", "Covered Parking", "Air Conditioning", "Housekeeping Available"],
+    features: ["pool", "garden", "parking", "ac", "staff", "furnished", "pets"],
     highlights: [
       "Walking distance to Gueliz galleries and restaurants",
       "Offered fully furnished on an annual lease",
@@ -121,6 +126,7 @@ export const properties: SeedProperty[] = [
       u("photo-1596178060671-7a80dc8059ea"),
     ],
     amenities: ["Courtyard Pool", "Rooftop Terrace", "Daily Breakfast", "Airport Transfer"],
+    features: ["pool", "terrace", "staff", "furnished"],
     highlights: [
       "Three minutes' walk from Jemaa el-Fnaa, behind an unmarked door",
       "Offered furnished on an annual lease",
@@ -154,6 +160,7 @@ export const properties: SeedProperty[] = [
       u("photo-1600047509807-ba8f99d2cdde"),
     ],
     amenities: ["Private Pool", "Palm Grove", "Staff Quarters", "Tennis Court", "Hammam"],
+    features: ["pool", "garden", "hammam", "staff", "security", "parking", "pets"],
     highlights: [
       "3 hectares of mature, irrigated palm grove",
       "Walled and gated, with round-the-clock security",
@@ -185,6 +192,7 @@ export const properties: SeedProperty[] = [
       u("photo-1596178060671-7a80dc8059ea"),
     ],
     amenities: ["Rooftop Pool", "Concierge", "Underground Parking", "Fitness Studio"],
+    features: ["pool", "terrace", "gym", "parking", "staff", "security", "ac", "smart_home"],
     highlights: [
       "Top-floor unit with panoramic views of the Atlas",
       "Walking distance to Hivernage's hotels and restaurants",
@@ -216,6 +224,7 @@ export const properties: SeedProperty[] = [
       u("photo-1602681797891-a1003186de8c"),
     ],
     amenities: ["Private Pool", "Garden", "Staff Quarters", "Air Conditioning", "Covered Parking"],
+    features: ["pool", "garden", "views", "ac", "parking", "staff", "furnished", "pets"],
     highlights: [
       "Fifteen minutes from central Marrakech",
       "Offered furnished on an annual lease",
@@ -247,6 +256,7 @@ export const properties: SeedProperty[] = [
       u("photo-1533105079780-92b9be482077"),
     ],
     amenities: ["Courtyard Pool", "Rooftop Terrace", "Hammam", "Restored Zellige"],
+    features: ["pool", "terrace", "hammam", "views"],
     highlights: [
       "Steps from the Saadian Tombs and the Kasbah Mosque",
       "Fully restored with traditional craftsmanship",

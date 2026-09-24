@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { type ListingType } from "@/data/properties";
-import { getAllProperties } from "@/lib/properties";
+import Link from "next/link";
+import type { ListingType } from "@/data/properties";
+import { searchProperties } from "@/lib/properties";
+import { parseFilters } from "@/lib/property-search";
 import { Container } from "@/components/shared/Container";
 import { PropertyCard } from "@/components/properties/PropertyCard";
 import { PropertyFilters } from "@/components/properties/PropertyFilters";
@@ -11,7 +13,7 @@ export const metadata: Metadata = {
   description: "A curated collection of exceptional properties from the TERRAYA portfolio.",
 };
 
-type SearchParams = { q?: string; type?: string; listingType?: string; bedrooms?: string; min?: string; max?: string };
+type SearchParams = Record<string, string | string[] | undefined>;
 
 const COPY: Record<ListingType | "ALL", { eyebrow: string; title: string; description: string }> = {
   ALL: {
@@ -40,25 +42,9 @@ export default async function PropertiesPage({
   searchParams: Promise<SearchParams>;
 }) {
   const sp = await searchParams;
-  const q = (sp.q ?? "").toLowerCase();
-  const type = sp.type ?? "";
-  const listingType = (sp.listingType ?? "") as ListingType | "";
-  const bedrooms = sp.bedrooms ? Number(sp.bedrooms) : 0;
-  const min = sp.min ? Number(sp.min) : 0;
-  const max = sp.max ? Number(sp.max) : Infinity;
-
-  const properties = await getAllProperties();
-  const filtered = properties.filter((p) => {
-    if (q && ![p.title, p.city, p.country, p.location].some((v) => v.toLowerCase().includes(q))) return false;
-    if (type && p.type !== type) return false;
-    if (listingType && p.listingType !== listingType) return false;
-    if (bedrooms && p.bedrooms < bedrooms) return false;
-    // Sale prices run into the millions, rent runs monthly in the
-    // thousands — the price filter only ever shows once a listing type is
-    // picked (see PropertyFilters), so it only ever applies to that type.
-    if (listingType && (p.priceEur < min || p.priceEur > max)) return false;
-    return true;
-  });
+  const filters = parseFilters(sp);
+  const filtered = await searchProperties(filters);
+  const listingType = filters.listingType;
 
   const copy = COPY[listingType || "ALL"];
 
@@ -86,9 +72,14 @@ export default async function PropertiesPage({
             <PropertyCard key={p.slug} p={p} />
           ))}
           {filtered.length === 0 && (
-            <p className="col-span-full text-sand-700 dark:text-sand-300 italic font-display text-2xl py-16 text-center">
-              Nothing in the collection matches yet — tell us what you need above, and we&apos;ll find it for you.
-            </p>
+            <div className="col-span-full py-16 text-center">
+              <p className="font-display text-2xl italic text-sand-700 dark:text-sand-300">
+                Nothing in the collection matches yet — tell us what you need above, and we&apos;ll find it for you.
+              </p>
+              <Link href="/properties" className="mt-6 inline-block border-b border-sand-900 pb-0.5 text-sm text-sand-900 dark:border-sand-100 dark:text-sand-100">
+                Clear all filters
+              </Link>
+            </div>
           )}
         </div>
       </Container>

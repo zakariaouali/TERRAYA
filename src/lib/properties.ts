@@ -1,5 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { properties as staticProperties, type SeedProperty } from "@/data/properties";
+import { cleanFeatures, deriveFeatures } from "@/lib/features";
+import { matches, sortProperties, tokens, type PropertyFilters } from "@/lib/property-search";
+import type { Prisma } from "@prisma/client";
 
 type PropertyRow = Awaited<ReturnType<typeof prisma.property.findFirst>>;
 
@@ -34,6 +37,7 @@ function toSeed(p: NonNullable<PropertyRow>): SeedProperty {
     images: parseArr(p.images),
     amenities: parseArr(p.amenities),
     highlights: parseArr(p.highlights),
+    features: cleanFeatures(parseArr(p.features)),
     latitude: p.latitude ?? undefined,
     longitude: p.longitude ?? undefined,
   };
@@ -78,4 +82,57 @@ export async function getPropertySlugs(): Promise<string[]> {
     /* fall through */
   }
   return staticProperties.map((p) => p.slug);
+}
+
+/**
+ * Search the catalogue. With a database the filtering, sorting is done by
+ * MySQL (indexed columns; features are matched as quoted JSON keys, so
+ * "pool" can never match "poolhouse"); with none it falls back to the same
+ * rules applied in memory over the static catalogue (`matches()`).
+ */
+export async function searchProperties(f: PropertyFilters): Promise<SeedProperty[]> {
+  try {
+    const total = await prisma.property.count({ where: { status: { not: "DRAFT" } } });
+    if (total > 0) {
+      const and: Prisma.PropertyWhereInput[] = [];
+      for (const t of tokens(f.q)) {
+        and.push({
+          OR: [
+            { title: { contains: t } },
+            { tagline: { contains: t } },
+            { city: { contains: t } },
+            { country: { contains: t } },
+            { location: { contains: t } },
+            { type: { contains: t } },
+          ],
+        });
+      }
+      for (const k of f.features) and.push({ features: { contains: `"${k}"` } });
+      if (f.listingType && f.min) and.push({ priceEur: { gte: BigInt(f.min) } });
+      if (f.listingType && f.max) and.push({ priceEur: { lte: BigInt(f.max) } });
+
+      const orderBy: Prisma.PropertyOrderByWithRelationInput[] =
+        f.sort === "price-asc" ? [{ priceEur: "asc" }]
+        : f.sort === "price-desc" ? [{ priceEur: "desc" }]
+        : f.sort === "area-desc" ? [{ areaSqm: "desc" }]
+        : [{ featured: "desc" }, { updatedAt: "desc" }];
+
+      const rows = await prisma.property.findMany({
+        where: {
+          status: { not: "DRAFT" },
+          ...(f.listingType ? { listingType: f.listingType } : {}),
+          ...(f.types.length ? { type: { in: f.types } } : {}),
+          ...(f.bedrooms ? { bedrooms: { gte: f.bedrooms } } : {}),
+          ...(f.bathrooms ? { bathrooms: { gte: f.bathrooms } } : {}),
+          ...(f.area ? { areaSqm: { gte: f.area } } : {}),
+          ...(and.length ? { AND: and } : {}),
+        },
+        orderBy,
+      });
+      return rows.map(toSeed);
+    }
+  } catch {
+    /* no database — fall through to static */
+  }
+  return sortProperties(staticProperties.filter((p) => matches(p, f)), f.sort);
 }

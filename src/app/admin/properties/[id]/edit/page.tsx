@@ -1,3 +1,4 @@
+import { cleanFeatures } from "@/lib/features";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { PropertyForm } from "@/components/admin/PropertyForm";
@@ -38,6 +39,7 @@ export default async function EditPropertyPage({ params }: { params: Promise<{ i
     featured: p.featured,
     images: parseArr(p.images),
     amenities: parseArr(p.amenities),
+    features: cleanFeatures(parseArr(p.features)),
     highlights: parseArr(p.highlights),
     latitude: p.latitude,
     longitude: p.longitude,

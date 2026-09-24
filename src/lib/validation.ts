@@ -1,3 +1,4 @@
+import { FEATURE_KEYS } from "@/lib/features";
 import { z } from "zod";
 
 export const loginSchema = z.object({
@@ -77,6 +78,7 @@ export const propertyUpsertSchema = z.object({
   heroImage: imageRef,
   images: z.array(imageRef).max(40),
   amenities: z.array(z.string().max(80)).max(40),
+  features: z.array(z.enum(FEATURE_KEYS)).max(20).default([]),
   highlights: z.array(z.string().max(160)).max(20),
   latitude: z.coerce.number().min(-90).max(90).optional().nullable(),
   longitude: z.coerce.number().min(-180).max(180).optional().nullable(),

@@ -11,6 +11,8 @@ import { CONTACT, whatsappHref } from "@/lib/contact";
 import { propertyTaglineFr } from "@/data/content.fr";
 import { useLang } from "@/lib/i18n";
 import { rentalTerms } from "@/lib/utils";
+import { featureLabel } from "@/lib/features";
+import { FEATURE_ICONS } from "@/components/properties/featureIcons";
 
 const LISTING_BADGE: Record<SeedProperty["listingType"], string | null> = {
   SALE: null,
@@ -89,6 +91,19 @@ export function PropertyCard({ p }: { p: SeedProperty }) {
         </p>
       )}
       <p className="mt-3 text-sand-700/90 dark:text-sand-300 leading-relaxed line-clamp-2">{tagline}</p>
+      {p.features.length > 0 && (
+        <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sand-600 dark:text-sand-400">
+          {p.features.slice(0, 5).map((k) => {
+            const Icon = FEATURE_ICONS[k];
+            return Icon ? (
+              <li key={k} title={featureLabel(k, lang === "fr" ? "fr" : "en")} className="flex items-center gap-1.5 text-xs">
+                <Icon size={15} strokeWidth={1.6} />
+                <span className="sr-only sm:not-sr-only">{featureLabel(k, lang === "fr" ? "fr" : "en")}</span>
+              </li>
+            ) : null;
+          })}
+        </ul>
+      )}
 
       {/* Stretched navigation link sits under the interactive overlays (favorite / contact) */}
       <Link href={`/properties/${p.slug}`} className="absolute inset-0 z-10" aria-label={p.title}>

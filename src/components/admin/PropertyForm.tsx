@@ -1,5 +1,6 @@
 "use client";
 
+import { FEATURES, FEATURE_GROUPS, type FeatureKey } from "@/lib/features";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -28,6 +29,7 @@ export type PropertyFormData = {
   featured: boolean;
   images: string[];
   amenities: string[];
+  features: FeatureKey[];
   highlights: string[];
   latitude: number | null;
   longitude: number | null;
@@ -37,7 +39,7 @@ const EMPTY: PropertyFormData = {
   slug: "", title: "", tagline: "", description: "", type: "VILLA", listingType: "SALE",
   status: "AVAILABLE", location: "", city: "", country: "", priceEur: 0,
   bedrooms: 0, bathrooms: 0, areaSqm: 0, landSqm: null, yieldPercent: null, featured: false,
-  images: [], amenities: [], highlights: [], latitude: null, longitude: null,
+  images: [], amenities: [], features: [], highlights: [], latitude: null, longitude: null,
 };
 
 const slugify = (s: string) =>
@@ -229,6 +231,34 @@ export function PropertyForm({ initial, id, fromSubmissionId }: { initial?: Part
       <section className="grid gap-6 sm:grid-cols-2">
         <ListEditor label="Amenities" items={data.amenities} onChange={(v) => set("amenities", v)} placeholder="e.g. Infinity Pool" />
         <ListEditor label="Highlights" items={data.highlights} onChange={(v) => set("highlights", v)} placeholder="e.g. 8 hectares of grounds" />
+      </section>
+
+      <section>
+        <Label>Search features</Label>
+        <p className="mb-3 text-xs text-sand-600">These power the visitor filters (pool, pets, furnished…). Tick everything that truly applies.</p>
+        <div className="space-y-4">
+          {FEATURE_GROUPS.map((g) => (
+            <div key={g.key}>
+              <p className="mb-2 text-[0.65rem] uppercase tracking-[0.22em] text-sand-500">{g.en}</p>
+              <div className="flex flex-wrap gap-2">
+                {FEATURES.filter((f) => f.group === g.key).map((f) => {
+                  const on = data.features.includes(f.key);
+                  return (
+                    <button
+                      key={f.key}
+                      type="button"
+                      aria-pressed={on}
+                      onClick={() => set("features", on ? data.features.filter((k) => k !== f.key) : [...data.features, f.key])}
+                      className={`border px-3 py-1.5 text-sm transition-colors ${on ? "border-sand-900 bg-sand-900 text-sand-50" : "border-sand-300 text-sand-700 hover:border-sand-600"}`}
+                    >
+                      {f.en}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       <label className="flex items-center gap-3 text-sm text-sand-800">

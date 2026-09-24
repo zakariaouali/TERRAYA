@@ -68,6 +68,7 @@ export async function POST(req: NextRequest) {
       priceEur: BigInt(d.priceEur),
       images: JSON.stringify(d.images),
       amenities: JSON.stringify(d.amenities),
+      features: JSON.stringify(d.features),
       highlights: JSON.stringify(d.highlights),
     },
   });
