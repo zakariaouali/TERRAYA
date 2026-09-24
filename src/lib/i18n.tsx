@@ -14,6 +14,7 @@ const en: Dict = {
   "nav.contact": "Contact",
   "nav.sell": "List",
   "nav.inquire": "Inquire",
+  "nav.consult": "Consultation",
   // Hero
   "hero.eyebrow": "Real Estate, Redefined",
   "hero.sub1": "Exceptional Properties.",
@@ -293,6 +294,7 @@ const en: Dict = {
   "footer.link.contact": "Contact",
   "footer.link.sell": "Sell / List",
   "footer.link.insights": "Insights",
+  "footer.link.consultation": "Private consultation",
   "footer.link.portal": "Client Portal",
   "footer.link.privacy": "Privacy",
   "footer.link.terms": "Terms",
@@ -308,6 +310,7 @@ const fr: Dict = {
   "nav.contact": "Contact",
   "nav.sell": "Lister",
   "nav.inquire": "Demander",
+  "nav.consult": "Consultation",
   // Hero
   "hero.eyebrow": "L'immobilier, réinventé",
   "hero.sub1": "Des biens d'exception.",
@@ -587,6 +590,7 @@ const fr: Dict = {
   "footer.link.contact": "Contact",
   "footer.link.sell": "Vendre",
   "footer.link.insights": "Analyses",
+  "footer.link.consultation": "Consultation privée",
   "footer.link.portal": "Espace client",
   "footer.link.privacy": "Confidentialité",
   "footer.link.terms": "Conditions",
