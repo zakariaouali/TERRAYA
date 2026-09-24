@@ -4,6 +4,10 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/shared/Container";
 import { FadeImage } from "@/components/shared/FadeImage";
 import { insights, getInsight } from "@/data/insights";
+import { HoverFrame } from "@/components/shared/HoverFrame";
+import { RevealText } from "@/components/shared/RevealText";
+import { ShareButton } from "@/components/properties/PropertyExtras";
+import { ArticleShell } from "@/components/insights/ReadingProgress";
 
 export function generateStaticParams() {
   return insights.map((i) => ({ slug: i.slug }));
@@ -53,55 +57,93 @@ export default async function InsightDetailPage({
   };
 
   return (
-    <article className="pt-32 lg:pt-40 pb-24">
+    <ArticleShell className="pb-24 pt-32 lg:pt-40">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Container>
         <div className="mx-auto max-w-3xl">
-          <Link
-            href="/insights"
-            className="text-xs tracking-[0.28em] uppercase text-sand-600 hover:text-sand-900 dark:text-sand-400 dark:hover:text-sand-100"
-          >
-            ← The Journal
-          </Link>
+          <div className="flex items-center justify-between gap-4">
+            <Link
+              href="/insights"
+              className="text-xs tracking-[0.28em] uppercase text-sand-600 hover:text-sand-900 dark:text-sand-400 dark:hover:text-sand-100"
+            >
+              ← The Journal
+            </Link>
+            <ShareButton title={article.title} />
+          </div>
           <p className="eyebrow mt-10">{article.tag}</p>
-          <h1 className="mt-5 font-display text-4xl md:text-5xl lg:text-6xl leading-[1.05] text-sand-900 dark:text-sand-100">
+          <RevealText as="h1" className="mt-5 font-display text-4xl leading-[1.05] text-sand-900 dark:text-sand-100 md:text-5xl lg:text-6xl">
             {article.title}
-          </h1>
+          </RevealText>
+          <p className="mt-6 text-xl leading-relaxed text-sand-700 dark:text-sand-300">{article.excerpt}</p>
           <p className="mt-6 text-xs uppercase tracking-[0.22em] text-sand-500 dark:text-sand-400">
-            {dateFmt(article.date)} · {article.readingMinutes} min read
+            TERRAYA Office · {dateFmt(article.date)} · {article.readingMinutes} min read
           </p>
         </div>
 
-        <div className="relative mx-auto mt-12 aspect-[16/9] max-w-5xl overflow-hidden ">
+        <div className="relative mx-auto mt-12 aspect-[16/9] max-w-5xl overflow-hidden">
           <FadeImage src={article.image} alt={article.title} fill priority sizes="100vw" className="object-cover" />
         </div>
 
-        <div className="mx-auto mt-16 max-w-2xl space-y-6">
+        <div className="mx-auto mt-16 max-w-2xl space-y-7">
           {article.body.map((p, i) => (
-            <p key={i} className="text-lg leading-relaxed text-sand-700 dark:text-sand-300">
+            <p
+              key={i}
+              className={
+                i === 0
+                  ? "text-lg leading-[1.8] text-sand-800 first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:font-display first-letter:text-7xl first-letter:leading-[0.8] first-letter:text-sand-900 dark:text-sand-200 dark:first-letter:text-sand-100"
+                  : "text-lg leading-[1.8] text-sand-800 dark:text-sand-200"
+              }
+            >
               {p}
             </p>
           ))}
         </div>
 
+        {/* Conversion block */}
+        <div className="mx-auto mt-20 max-w-2xl border border-sand-300 bg-sand-50 p-8 dark:border-sand-700 dark:bg-sand-900 sm:p-10">
+          <p className="eyebrow">A conversation, before a transaction</p>
+          <p className="mt-3 font-display text-3xl leading-tight text-sand-900 dark:text-sand-100">
+            Questions about this market? Ask the people who work in it.
+          </p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Link
+              href="/consultation"
+              className="bg-sand-900 px-7 py-3.5 text-[0.68rem] uppercase tracking-[0.22em] text-sand-50 transition-colors hover:bg-sand-700 dark:bg-sand-100 dark:text-sand-900 dark:hover:bg-sand-300"
+            >
+              Book a consultation
+            </Link>
+            <Link
+              href="/properties"
+              className="border border-sand-900/30 px-7 py-3.5 text-[0.68rem] uppercase tracking-[0.22em] text-sand-900 transition-colors hover:bg-sand-900 hover:text-sand-50 dark:border-sand-100/30 dark:text-sand-100 dark:hover:bg-sand-100 dark:hover:text-sand-900"
+            >
+              Browse the collection
+            </Link>
+          </div>
+        </div>
+
         {more.length > 0 && (
-          <div className="mx-auto mt-24 max-w-2xl border-t border-sand-200 dark:border-sand-800 pt-12">
-            <p className="eyebrow mb-6">Continue reading</p>
-            <ul className="space-y-5">
+          <div className="mx-auto mt-24 max-w-5xl border-t border-sand-200 pt-12 dark:border-sand-800">
+            <p className="eyebrow mb-8">Continue reading</p>
+            <div className="grid gap-10 md:grid-cols-2">
               {more.map((m) => (
-                <li key={m.slug}>
-                  <Link href={`/insights/${m.slug}`} className="group flex items-baseline justify-between gap-6">
-                    <span className="font-display text-2xl text-sand-900 dark:text-sand-100 transition-colors group-hover:text-sand-600 dark:group-hover:text-sand-300">
+                <Link key={m.slug} href={`/insights/${m.slug}`} className="group block">
+                  <HoverFrame
+                    className="aspect-[16/10]"
+                    cursorLabel="Read"
+                    image={<FadeImage src={m.image} alt={m.title} fill sizes="(min-width:768px) 40vw, 100vw" className="object-cover" />}
+                  />
+                  <p className="eyebrow mt-5">{m.tag}</p>
+                  <h3 className="mt-2 font-display text-2xl text-sand-900 dark:text-sand-100">
+                    <span className="bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1px] bg-left-bottom bg-no-repeat transition-[background-size] duration-500 group-hover:bg-[length:100%_1px]">
                       {m.title}
                     </span>
-                    <span className="shrink-0 text-xs uppercase tracking-[0.22em] text-sand-500 dark:text-sand-400">{m.tag}</span>
-                  </Link>
-                </li>
+                  </h3>
+                </Link>
               ))}
-            </ul>
+            </div>
           </div>
         )}
       </Container>
-    </article>
+    </ArticleShell>
   );
 }
