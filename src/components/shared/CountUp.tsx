@@ -1,48 +1,46 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useInView, useReducedMotion } from "framer-motion";
+import { animate, useInView, useReducedMotion } from "framer-motion";
 
+/**
+ * Counts from 0 to `to` once it scrolls into view. Renders the final value
+ * immediately for reduced-motion users, and until hydration/visibility, so
+ * the layout never jumps and no-JS readers still see the real number.
+ */
 export function CountUp({
-  value,
-  decimals = 0,
+  to,
   prefix = "",
   suffix = "",
-  duration = 1.6,
+  duration = 1.8,
+  className,
 }: {
-  value: number;
-  decimals?: number;
+  to: number;
   prefix?: string;
   suffix?: string;
   duration?: number;
+  className?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, margin: "-60px" });
   const reduce = useReducedMotion();
-  const [display, setDisplay] = useState(0);
+  const [value, setValue] = useState(to);
 
   useEffect(() => {
-    if (!inView) return;
-    if (reduce) {
-      setDisplay(value);
-      return;
-    }
-    let raf = 0;
-    const start = performance.now();
-    const tick = (now: number) => {
-      const p = Math.min((now - start) / (duration * 1000), 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setDisplay(value * eased);
-      if (p < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [inView, value, reduce, duration]);
+    if (!inView || reduce) return;
+    setValue(0);
+    const controls = animate(0, to, {
+      duration,
+      ease: [0.16, 1, 0.3, 1],
+      onUpdate: (v) => setValue(Math.round(v)),
+    });
+    return () => controls.stop();
+  }, [inView, reduce, to, duration]);
 
   return (
-    <span ref={ref}>
+    <span ref={ref} className={className}>
       {prefix}
-      {display.toFixed(decimals)}
+      {value}
       {suffix}
     </span>
   );
